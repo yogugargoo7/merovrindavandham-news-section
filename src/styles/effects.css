@@ -1,0 +1,328 @@
+/* =====================================================================
+   MODERN UI EFFECTS LAYER
+   Trendy, performant micro-interactions applied to existing global
+   classes so the whole site gains a premium feel automatically.
+   Classic palette: warm cream + espresso brown + caramel/champagne-gold accent.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. PREMIUM BUTTON SHINE SWEEP
+   A diagonal light sweeps across primary buttons on hover.
+   --------------------------------------------------------------------- */
+.btn-primary,
+.page-cta-btn--primary,
+.contact-form__submit,
+.enquiry-primary,
+.amenities-btn-primary,
+.features-btn-primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-primary::after,
+.page-cta-btn--primary::after,
+.contact-form__submit::after,
+.enquiry-primary::after,
+.amenities-btn-primary::after,
+.features-btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -130%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.btn-primary:hover::after,
+.page-cta-btn--primary:hover::after,
+.contact-form__submit:hover::after,
+.enquiry-primary:hover::after,
+.amenities-btn-primary:hover::after,
+.features-btn-primary:hover::after {
+  left: 150%;
+}
+
+/* ---------------------------------------------------------------------
+   2. HOVER LIFT + GLOW for common primary buttons (no pseudo conflict)
+   --------------------------------------------------------------------- */
+.faq-cta-button.primary,
+.process-cta-primary,
+.av-modal__btn--primary,
+.plot-card__btn,
+.pp-card__btn,
+.contact-card__btn,
+.qlm-submit,
+.daily-stories-action {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, filter 0.28s ease;
+}
+
+.faq-cta-button.primary:hover,
+.process-cta-primary:hover,
+.av-modal__btn--primary:hover,
+.plot-card__btn:hover,
+.pp-card__btn:hover,
+.contact-card__btn:hover,
+.qlm-submit:hover,
+.daily-stories-action:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.05);
+  box-shadow: 0 14px 32px rgba(169, 118, 63, 0.34);
+}
+
+/* ---------------------------------------------------------------------
+   3. GRADIENT TEXT for section titles (premium sheen on light bg)
+   Higher specificity so it reliably overrides the base color.
+   --------------------------------------------------------------------- */
+.inner-header .inner-title {
+  background: linear-gradient(120deg, #33271c 0%, #a9763f 52%, #33271c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #33271c; /* fallback */
+}
+
+/* ---------------------------------------------------------------------
+   4. ANIMATED AURORA GLOW inside CTA strips (slow drifting light)
+   --------------------------------------------------------------------- */
+.page-cta-strip::after,
+.page-cta-strip--about::after,
+.page-cta-strip--plots::after,
+.page-cta-strip--availability::after,
+.page-cta-strip--gallery::after,
+.page-cta-strip--payment::after,
+.page-cta-strip--contact::after {
+  animation: ctaAurora 9s ease-in-out infinite alternate;
+}
+
+@keyframes ctaAurora {
+  0%   { transform: translate3d(-4%, 0, 0) scale(1);    opacity: 0.75; }
+  100% { transform: translate3d(4%, -8%, 0) scale(1.12); opacity: 1; }
+}
+
+/* Floating soft orbs behind CTA content for depth */
+.page-cta-strip__buttons { z-index: 2; }
+
+/* ---------------------------------------------------------------------
+   5. CLASSIC EMERALD + GOLD — champagne dot on every section kicker
+   --------------------------------------------------------------------- */
+.inner-kicker::before,
+.page-banner__kicker::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-2-light), var(--accent-2));
+  box-shadow: 0 0 8px rgba(212, 169, 60, 0.7);
+  flex: 0 0 auto;
+}
+
+/* Gold accent on the decorative section lines */
+.section-gold-line {
+  background: linear-gradient(90deg, var(--accent-2), var(--accent-2-light), transparent);
+}
+
+/* ---------------------------------------------------------------------
+   6. CARD HOVER LIFT + GLOW (curated card classes; harmless if absent)
+   --------------------------------------------------------------------- */
+.contact-card,
+.pp-card,
+.plot-card,
+.amenity-card,
+.feature-card,
+.process-step-card,
+.testimonial-card,
+.trust-card,
+.daily-story-card,
+.experience-card {
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s ease;
+  will-change: transform;
+}
+
+.contact-card:hover,
+.pp-card:hover,
+.plot-card:hover,
+.amenity-card:hover,
+.feature-card:hover,
+.process-step-card:hover,
+.testimonial-card:hover,
+.trust-card:hover,
+.daily-story-card:hover,
+.experience-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 26px 56px rgba(58, 45, 32, 0.16), 0 0 0 1px rgba(169, 118, 63, 0.12);
+}
+
+/* ---------------------------------------------------------------------
+   7. ANIMATED UNDERLINE on text links (footer / quick links)
+   --------------------------------------------------------------------- */
+.footer-link,
+.hdr__link {
+  position: relative;
+}
+
+.footer-link::after,
+.hdr__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--brand-accent), var(--accent-2));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-link:hover::after,
+.hdr__link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------------------------------------------------------------------
+   8. IMAGE ZOOM on hover inside cards/galleries
+   --------------------------------------------------------------------- */
+.daily-story-card,
+.plot-card,
+.experience-card {
+  overflow: hidden;
+}
+
+.daily-story-card img,
+.plot-card img,
+.experience-card img {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.daily-story-card:hover img,
+.plot-card:hover img,
+.experience-card:hover img {
+  transform: scale(1.07);
+}
+
+/* ---------------------------------------------------------------------
+   9. SOFT FOCUS RING polish (accessible + premium)
+   --------------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------------------------------------------------------------------
+   10. PAGE-TO-PAGE ROUTE TRANSITION
+   GPU-only (transform + opacity) for buttery, high-refresh smoothness.
+   --------------------------------------------------------------------- */
+.route-transition {
+  animation: routeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: center top;
+  will-change: transform, opacity;
+}
+
+@keyframes routeIn {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* ---------------------------------------------------------------------
+   11. CINEMATIC SCROLL REVEALS — GPU-only (transform + opacity)
+   No blur / no clip-path during motion => no paint jank, runs on the
+   compositor thread so it stays smooth at high refresh rates.
+   --------------------------------------------------------------------- */
+.reveal-on-scroll {
+  transform: translate3d(0, 38px, 0) scale(0.985);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+.reveal-on-scroll.is-visible {
+  transform: translate3d(0, 0, 0) scale(1);
+  will-change: auto;
+}
+
+.reveal-scale {
+  transform: translate3d(0, 0, 0) scale(0.92);
+  transition:
+    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+.reveal-scale.is-visible {
+  transform: translate3d(0, 0, 0) scale(1);
+  will-change: auto;
+}
+
+.stagger-children > * {
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+.stagger-children.is-visible > * {
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+/* ---------------------------------------------------------------------
+   12. SCROLL-DRIVEN SECTION-HEADER PARALLAX (progressive enhancement)
+   Pure-CSS, compositor-driven, transform+opacity only. Targets section
+   headers (no transform/hover elsewhere) so nothing conflicts. Browsers
+   without support just render normally.
+   --------------------------------------------------------------------- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .inner-header,
+    .page-cta-strip__title {
+      animation: headerParallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+      will-change: transform, opacity;
+    }
+  }
+}
+
+@keyframes headerParallax {
+  from { opacity: 0.35; transform: translate3d(0, 30px, 0); }
+  to   { opacity: 1;    transform: translate3d(0, 0, 0); }
+}
+
+/* ---------------------------------------------------------------------
+   REDUCED MOTION — disable decorative motion when requested
+   --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary::after,
+  .page-cta-btn--primary::after,
+  .page-cta-strip::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .daily-story-card:hover img,
+  .plot-card:hover img,
+  .experience-card:hover img {
+    transform: none;
+  }
+
+  /* Never leave content blurred / clipped if motion is off */
+  .route-transition,
+  .reveal-on-scroll,
+  .reveal-scale,
+  .stagger-children > * {
+    filter: none !important;
+    clip-path: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

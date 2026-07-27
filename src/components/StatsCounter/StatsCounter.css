@@ -1,0 +1,181 @@
+/* StatsCounter Section - Professional Real Estate Stats */
+
+.stats-section {
+  position: relative;
+  padding: 100px 0;
+  background: linear-gradient(135deg, #3a2d20 0%, #0a2019 40%, #123828 70%, #3a2d20 100%);
+  overflow: hidden;
+}
+
+.stats-bg-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(169, 118, 63, 0.1) 0%, transparent 55%),
+    radial-gradient(circle at 85% 20%, rgba(169, 118, 63, 0.07) 0%, transparent 45%),
+    radial-gradient(circle at 55% 85%, rgba(255, 255, 255, 0.03) 0%, transparent 35%);
+  pointer-events: none;
+}
+
+/* Subtle grid texture */
+.stats-bg-pattern::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.stats-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.stats-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand-accent);
+  background: rgba(169, 118, 63, 0.1);
+  border: 1px solid rgba(169, 118, 63, 0.28);
+  padding: 7px 18px;
+  border-radius: 6px;
+  margin-bottom: 18px;
+}
+
+.stats-title {
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-family: var(--font-family-heading);
+  color: #FFFFFF;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-section {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .stats-section {
+    padding: 72px 0;
+  }
+
+  .stats-container {
+    padding: 0 18px;
+  }
+}
+
+/* Stat Card */
+.stat-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(169, 118, 63, 0.16);
+  border-radius: 18px;
+  padding: 40px 28px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  animation: countUp 0.6s ease-out both;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--brand-accent), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(169, 118, 63, 0.44);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+}
+
+.stat-glow {
+  position: absolute;
+  inset: -60%;
+  background: radial-gradient(circle at center, rgba(169, 118, 63, 0.08) 0%, transparent 65%);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.stat-card:hover .stat-glow {
+  opacity: 1;
+}
+
+.stat-value {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+  color: var(--brand-accent);
+  line-height: 1.05;
+  margin-bottom: 12px;
+  letter-spacing: 0;
+  text-shadow: 0 2px 16px rgba(169, 118, 63, 0.28);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: var(--font-family-primary);
+}
+
+.stat-note {
+  margin: 12px auto 0;
+  max-width: 220px;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}

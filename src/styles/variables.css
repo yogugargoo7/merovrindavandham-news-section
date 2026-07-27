@@ -1,0 +1,303 @@
+/* CSS Variables for Real Estate Landing Page - Premium Design System v6 (Warm Cream + Espresso + Caramel Gold) */
+
+:root {
+  /* === CORE BRAND COLORS === */
+  --royal-blue: #3a2d20;
+  --deep-royal-green: #3a2d20;
+  --peacock-blue: #a9763f;
+  --lotus-pink: #c89a5e;
+  --temple-gold: #a9763f;
+  --sandstone-beige: #e0dacb;
+  --warm-ivory: #FFFFFF;
+  --maroon-accent: #7a4f24;
+
+  /* === BRAND MAPPINGS === */
+  --brand-primary: #3a2d20;
+  --brand-secondary: var(--peacock-blue);
+  --brand-accent: #a9763f;
+  --brand-accent-light: #c89a5e;
+  --brand-accent-dark: #7a4f24;
+  --brand-warm: var(--warm-ivory);
+  --brand-danger: #B23A48;
+
+  /* Secondary highlight accent — champagne gold (classic emerald + gold combo) */
+  --accent-2: #D4A93C;
+  --accent-2-light: #E8C56A;
+  --accent-2-dark: #B0852A;
+
+  /* Legacy Color Mappings for Compatibility */
+  --primary-color: var(--brand-primary);
+  --secondary-color: var(--brand-secondary);
+  --accent-color: var(--brand-accent);
+  --accent-gold: var(--brand-accent);
+  --accent-gold-light: var(--brand-accent-light);
+  --accent-gold-dark: var(--brand-accent-dark);
+  --accent-orange: var(--brand-accent);
+  --primary-navy: var(--brand-primary);
+  --primary-blue: var(--brand-secondary);
+  --primary-dark: var(--brand-primary);
+
+  /* === NEUTRAL COLORS (cool, blue-tinted) === */
+  --true-white: #FFFFFF;
+  --white: #FFFFFF;
+  --gray-50: #FFFFFF;
+  --gray-100: #f1ece0;
+  --gray-200: #e0dacb;
+  --gray-300: #c2b79c;
+  --gray-400: #a1937a;
+  --gray-500: #7a6f5a;
+  --gray-600: #564e3f;
+  --gray-700: #332e25;
+  --gray-800: #1e1a14;
+  --gray-900: #3a2d20;
+
+  /* === SEMANTIC COLORS === */
+  --success: #16a34a;
+  --warning: #d97706;
+  --error: #dc2626;
+  --info: #a9763f;
+
+  /* === BACKGROUND HIERARCHY === */
+  --background-primary: #FFFFFF;
+  --background-secondary: #FFFFFF;
+  --background-tertiary: #FFFFFF;
+  --background-dark: var(--brand-primary);
+  --background-darker: #2c2118;
+
+  /* === TEXT COLORS === */
+  --text-primary: #3a2d20;
+  --text-secondary: #332e25;
+  --text-tertiary: #564e3f;
+  --text-muted: #7a6f5a;
+  --text-white: #FFFFFF;
+  --text-gold: var(--brand-accent);
+  --text-color: var(--text-primary);
+  --text-light: var(--text-tertiary);
+
+/* Border & Overlay Colors - Professional Depth */
+--border-primary: var(--gray-200);
+--border-secondary: var(--gray-300);
+--border-light: var(--gray-100);
+--overlay-primary: rgba(58, 45, 32, 0.9);
+--overlay-secondary: rgba(58, 45, 32, 0.7);
+--overlay-light: rgba(58, 45, 32, 0.5);
+
+
+  /* === TYPOGRAPHY SYSTEM === */
+  --font-family-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-family-display: 'Bebas Neue', Impact, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Font Sizes - Improved Scale */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  --font-size-6xl: 3.75rem;   /* 60px */
+  --font-size-7xl: 4.5rem;    /* 72px */
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+
+  /* Spacing - Enhanced Scale */
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-0-5: 0.125rem;    /* 2px */
+  --spacing-1: 0.25rem;       /* 4px */
+  --spacing-1-5: 0.375rem;    /* 6px */
+  --spacing-2: 0.5rem;        /* 8px */
+  --spacing-2-5: 0.625rem;    /* 10px */
+  --spacing-3: 0.75rem;       /* 12px */
+  --spacing-3-5: 0.875rem;    /* 14px */
+  --spacing-4: 1rem;          /* 16px */
+  --spacing-5: 1.25rem;       /* 20px */
+  --spacing-6: 1.5rem;        /* 24px */
+  --spacing-7: 1.75rem;       /* 28px */
+  --spacing-8: 2rem;          /* 32px */
+  --spacing-9: 2.25rem;       /* 36px */
+  --spacing-10: 2.5rem;       /* 40px */
+  --spacing-12: 3rem;         /* 48px */
+  --spacing-14: 3.5rem;       /* 56px */
+  --spacing-16: 4rem;         /* 64px */
+  --spacing-20: 5rem;         /* 80px */
+  --spacing-24: 6rem;         /* 96px */
+  --spacing-32: 8rem;         /* 128px */
+
+  /* Legacy Spacing Mappings */
+  --spacing-xs: var(--spacing-1);
+  --spacing-sm: var(--spacing-2);
+  --spacing-md: var(--spacing-4);
+  --spacing-lg: var(--spacing-6);
+  --spacing-xl: var(--spacing-8);
+  --spacing-2xl: var(--spacing-12);
+  --spacing-3xl: var(--spacing-16);
+
+
+  /* Responsive Breakpoints */
+  --breakpoint-xs: 475px;     /* Extra small devices */
+  --breakpoint-sm: 640px;     /* Small devices */
+  --breakpoint-md: 768px;     /* Medium devices */
+  --breakpoint-lg: 1024px;    /* Large devices */
+  --breakpoint-xl: 1280px;    /* Extra large devices */
+  --breakpoint-2xl: 1536px;   /* 2X large devices */
+
+  /* Legacy Breakpoint Mappings */
+  --breakpoint-mobile: var(--breakpoint-md);
+  --breakpoint-tablet: var(--breakpoint-lg);
+  --breakpoint-desktop: 1440px;
+
+  /* Shadows - Premium Soft Multi-layer System (cool blue-tinted) */
+  --shadow-xs: 0 1px 2px 0 rgba(58, 45, 32, 0.06);
+  --shadow-sm: 0 1px 3px 0 rgba(58, 45, 32, 0.10), 0 1px 2px 0 rgba(58, 45, 32, 0.06);
+  --shadow-md: 0 6px 16px -4px rgba(58, 45, 32, 0.12), 0 2px 6px -2px rgba(58, 45, 32, 0.08);
+  --shadow-lg: 0 14px 30px -8px rgba(58, 45, 32, 0.16), 0 6px 12px -6px rgba(58, 45, 32, 0.10);
+  --shadow-xl: 0 26px 50px -12px rgba(58, 45, 32, 0.22), 0 12px 20px -10px rgba(58, 45, 32, 0.12);
+  --shadow-2xl: 0 36px 70px -16px rgba(58, 45, 32, 0.30);
+  --shadow-inner: inset 0 2px 4px 0 rgba(58, 45, 32, 0.06);
+
+  /* Border Radius - Enhanced Scale */
+  --border-radius-none: 0;
+  --border-radius-sm: 0.125rem;   /* 2px */
+  --border-radius-md: 0.375rem;   /* 6px */
+  --border-radius-lg: 0.5rem;     /* 8px */
+  --border-radius-xl: 0.75rem;    /* 12px */
+  --border-radius-2xl: 1rem;      /* 16px */
+  --border-radius-3xl: 1.5rem;    /* 24px */
+  --border-radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+
+  /* Z-index Scale */
+  --z-index-hide: -1;
+  --z-index-auto: auto;
+  --z-index-base: 0;
+  --z-index-docked: 10;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-banner: 1030;
+  --z-index-overlay: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-skiplink: 1070;
+  --z-index-tooltip: 1080;
+
+  /* === COMPONENT COLOR SYSTEM === */
+
+  /* Header/Navigation */
+  --header-bg: var(--brand-primary);
+  --header-scrolled-bg: rgba(255, 255, 255, 0.97);
+  --header-text: var(--true-white);
+  --header-scrolled-text: var(--brand-primary);
+  --header-accent: var(--brand-accent);
+  --header-border: rgba(169, 118, 63, 0.14);
+
+  /* Hero */
+  --hero-bg: var(--brand-primary);
+  --hero-overlay: rgba(44, 33, 24, 0.72);
+  --hero-text: var(--true-white);
+  --hero-accent: var(--brand-accent);
+
+  /* Buttons - Premium System */
+  --btn-primary-bg: var(--brand-accent);
+  --btn-primary-text: #FFFFFF;
+  --btn-primary-hover: var(--brand-accent-light);
+  --btn-secondary-bg: transparent;
+  --btn-secondary-text: var(--brand-accent);
+  --btn-secondary-border: var(--brand-accent);
+  --btn-secondary-hover: var(--brand-accent);
+  --btn-border-radius: 10px;
+  --btn-border-radius-pill: 999px;
+
+  /* Cards */
+  --card-bg: #FFFFFF;
+  --card-border: #e0dacb;
+  --card-shadow: 0 6px 26px rgba(58, 45, 32, 0.07);
+  --card-hover-shadow: 0 18px 50px rgba(58, 45, 32, 0.14);
+
+  /* Footer */
+  --footer-bg: #2c2118;
+  --footer-text: var(--gray-300);
+  --footer-heading: var(--true-white);
+  --footer-accent: var(--brand-accent);
+  --footer-border: rgba(255, 255, 255, 0.08);
+
+  /* Forms */
+  --form-bg: #FFFFFF;
+  --form-border: #d8d0bd;
+  --form-focus: var(--brand-accent);
+  --form-text: var(--text-primary);
+  --form-placeholder: var(--text-muted);
+
+  /* Section Backgrounds */
+  --section-bg-primary: #FFFFFF;
+  --section-bg-secondary: #FFFFFF;
+  --section-bg-warm: #f1ece0;
+  --section-bg-dark: var(--brand-primary);
+  --section-text-primary: var(--text-primary);
+  --section-text-secondary: var(--text-secondary);
+  --section-accent: var(--brand-accent);
+
+  /* Borders */
+  --border-primary: #e0dacb;
+  --border-secondary: #c2b79c;
+  --border-light: #f1ece0;
+
+  /* Overlays */
+  --overlay-primary: rgba(58, 45, 32, 0.88);
+  --overlay-secondary: rgba(58, 45, 32, 0.68);
+  --overlay-light: rgba(58, 45, 32, 0.44);
+
+  /* === PAGE-SPECIFIC ACCENT COLORS (premium cool family) === */
+  /* Each inner page keeps a subtle identity within the blue palette */
+  --page-about-color: #a9763f;
+  --page-about-light: #c89a5e;
+  --page-about-glow: rgba(21, 82, 126, 0.35);
+
+  --page-plots-color: #a9763f;
+  --page-plots-light: #b0824a;
+  --page-plots-glow: rgba(22, 51, 95, 0.35);
+
+  --page-availability-color: #9c6b34;
+  --page-availability-light: #c89a5e;
+  --page-availability-glow: rgba(36, 59, 114, 0.35);
+
+  --page-gallery-color: #a9763f;
+  --page-gallery-light: #c89a5e;
+  --page-gallery-glow: rgba(23, 58, 94, 0.35);
+
+  --page-payment-color: #7a4f24;
+  --page-payment-light: #b0824a;
+  --page-payment-glow: rgba(14, 51, 87, 0.35);
+
+  --page-contact-color: #a9763f;
+  --page-contact-light: #2D7A9A;
+  --page-contact-glow: rgba(19, 68, 96, 0.35);
+
+  /* === ENHANCED GRADIENT PRESETS === */
+  --gradient-gold: linear-gradient(135deg, #a9763f 0%, #c89a5e 50%, #a9763f 100%);
+  --gradient-dark: linear-gradient(135deg, #2c2118 0%, #3a2d20 100%);
+  --gradient-warm: linear-gradient(135deg, #fbf9f3 0%, #f4efe3 100%);
+  --gradient-emerald: linear-gradient(135deg, #3a2d20 0%, #b0824a 100%);
+}

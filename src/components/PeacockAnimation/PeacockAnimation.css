@@ -1,0 +1,50 @@
+.peacock-animation {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+  contain: layout paint;
+}
+
+.peacock-wing {
+  position: absolute;
+  top: 50%;
+  left: -34vw;
+  width: min(62vw, 760px);
+  height: auto;
+  opacity: 0;
+  transform-origin: center;
+  animation: peacock-fly 10s ease-in-out forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+@keyframes peacock-fly {
+  0% {
+    transform: translate3d(-10vw, -50%, 0) rotate(-10deg) scale(0.72);
+    opacity: 0;
+  }
+
+  14% {
+    opacity: 1;
+  }
+
+  58% {
+    transform: translate3d(58vw, -58%, 0) rotate(5deg) scale(1);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translate3d(128vw, -50%, 0) rotate(14deg) scale(0.84);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  .peacock-animation {
+    display: none;
+  }
+}

@@ -1,0 +1,368 @@
+.experience-shell {
+  position: relative;
+  padding: 100px 0 88px;
+  background: #FFFFFF;
+}
+
+.experience-sticky-stage {
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0;
+}
+
+.experience-heading-wrap,
+.experience-progress-ui,
+.experience-horizontal-window {
+  width: min(1340px, calc(100vw - 48px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.experience-heading-wrap {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+  z-index: 3;
+}
+
+.experience-kicker,
+.experience-step-kicker {
+  display: inline-flex;
+  align-items: center;
+  color: var(--brand-accent-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(169, 118, 63, 0.1);
+  border: 1px solid rgba(169, 118, 63, 0.28);
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+.experience-heading-wrap h2 {
+  margin-top: 10px;
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  line-height: 1.08;
+  color: #151515;
+  max-width: 860px;
+}
+
+.experience-heading-copy {
+  margin-top: 14px;
+  max-width: 760px;
+  color: #475467;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.experience-brochure-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 22px;
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #111827, #344054);
+  box-shadow: 0 14px 30px rgba(17, 24, 39, 0.18);
+}
+
+.experience-horizontal-window {
+  overflow: hidden;
+  position: relative;
+}
+
+.experience-horizontal-track {
+  display: flex;
+  will-change: transform;
+  transition: transform 0.45s ease;
+}
+
+.experience-nav-btn {
+  position: absolute;
+  top: 50%;
+  z-index: 4;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: #3a2d20;
+  color: #c89a5e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: translateY(-50%);
+  box-shadow: 0 18px 34px rgba(18, 60, 47, 0.22);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.experience-nav-btn:hover {
+  background: #c89a5e;
+  color: #3a2d20;
+  transform: translateY(-50%) scale(1.04);
+}
+
+.experience-nav-prev {
+  left: 18px;
+}
+
+.experience-nav-next {
+  right: 18px;
+}
+
+.experience-slide {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
+  gap: 32px;
+  align-items: stretch;
+}
+
+.experience-slide-visual,
+.experience-slide-copy {
+  min-height: 62vh;
+}
+
+.experience-slide-visual {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(58, 45, 32, 0.1);
+  background: #FFFFFF;
+  border: 1px solid #e0dacb;
+}
+
+.experience-slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #fbf7f0;
+  padding: 18px;
+}
+
+.experience-slide-overlay {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  padding: 18px 20px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.08), rgba(17, 24, 39, 0.88));
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+
+.experience-slide-overlay h3 {
+  margin-top: 8px;
+  font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+  line-height: 1.24;
+}
+
+.experience-slide-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 30px;
+  padding: 38px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.07);
+}
+
+.experience-slide-number {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #e0dacb, #c89a5e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #111827;
+  font-size: 1.35rem;
+  margin-bottom: 20px;
+}
+
+.experience-slide-copy h3 {
+  margin-top: 10px;
+  color: #111827;
+  font-size: clamp(1.6rem, 2.4vw, 2.35rem);
+  line-height: 1.16;
+}
+
+.experience-slide-copy p {
+  margin-top: 16px;
+  color: #475467;
+  line-height: 1.88;
+  font-size: 1rem;
+}
+
+.experience-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.experience-chip {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(169, 118, 63, 0.1);
+  color: var(--brand-primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid rgba(169, 118, 63, 0.24);
+}
+
+.experience-progress-ui {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.experience-progress-bar {
+  flex: 1;
+  min-width: 120px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.08);
+  overflow: hidden;
+}
+
+.experience-progress-bar span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #c89a5e, #b0824a);
+  border-radius: inherit;
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+.experience-progress-meta {
+  min-width: 140px;
+  text-align: right;
+}
+
+.experience-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.experience-dot {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(28, 84, 137, 0.24);
+  cursor: pointer;
+  padding: 0;
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.experience-dot.active {
+  width: 28px;
+  background: #b0824a;
+}
+
+.experience-progress-meta strong {
+  display: block;
+  font-size: 1.2rem;
+  color: #111827;
+}
+
+.experience-progress-meta p {
+  margin-top: 4px;
+  color: #b0824a;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  .experience-shell {
+    padding: 72px 16px;
+  }
+
+  .experience-sticky-stage {
+    gap: 22px;
+  }
+
+  .experience-heading-wrap,
+  .experience-progress-ui,
+  .experience-horizontal-window {
+    width: 100%;
+    margin: 0;
+  }
+
+  .experience-heading-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .experience-slide {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-slide-visual,
+  .experience-slide-copy {
+    min-height: auto;
+  }
+
+  .experience-slide-image {
+    min-height: 320px;
+  }
+
+  .experience-progress-ui { flex-wrap: wrap; }
+  .experience-dots { order: 3; width: 100%; justify-content: center; }
+
+  .experience-nav-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .experience-nav-prev {
+    left: 10px;
+  }
+
+  .experience-nav-next {
+    right: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .experience-heading-wrap h2 {
+    font-size: 2rem;
+  }
+
+  .experience-slide-copy {
+    padding: 24px;
+  }
+
+  .experience-slide-copy h3 {
+    font-size: 1.5rem;
+  }
+
+  .experience-slide-image {
+    min-height: 260px;
+    padding: 10px;
+  }
+
+  .experience-progress-meta {
+    min-width: 92px;
+  }
+}

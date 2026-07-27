@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+  background: #FFFFFF;
+}
+
+#root {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+section[id] {
+  scroll-margin-top: 110px;
+}

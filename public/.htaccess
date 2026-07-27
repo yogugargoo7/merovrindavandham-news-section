@@ -1,0 +1,22 @@
+RewriteEngine On
+
+# Hostinger/Apache API proxy for CRM requests.
+RewriteRule ^api/(.*)$ api-proxy.php?path=$1 [QSA,L]
+
+# Serve existing files and folders directly.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# React Router fallback.
+RewriteRule ^ index.html [L]
+
+# Long browser caching for static media (images/videos rarely change).
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType video/mp4 "access plus 30 days"
+  ExpiresByType application/pdf "access plus 7 days"
+</IfModule>

@@ -1,0 +1,119 @@
+.nf-shell {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-secondary, #FFFFFF);
+  padding: 3rem 1.5rem;
+}
+
+.nf-inner {
+  text-align: center;
+  max-width: 520px;
+}
+
+.nf-badge {
+  font-size: 7rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--brand-primary, #3a2d20);
+  opacity: 0.08;
+  font-family: var(--font-family-display, 'Bebas Neue', sans-serif);
+  letter-spacing: 0.04em;
+  margin-bottom: -1rem;
+}
+
+.nf-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary, #131008);
+  margin: 0 0 1rem;
+  font-family: var(--font-family-heading, 'Cormorant Garamond', serif);
+}
+
+.nf-sub {
+  font-size: 1rem;
+  color: var(--text-muted, #7a6f5a);
+  line-height: 1.7;
+  margin: 0 0 2.5rem;
+}
+
+.nf-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.nf-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.75rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.nf-btn--primary {
+  background: var(--brand-accent, #a9763f);
+  color: var(--brand-primary, #3a2d20);
+}
+
+.nf-btn--primary:hover {
+  background: var(--brand-accent-light, #ddc69a);
+  transform: translateY(-1px);
+}
+
+.nf-btn--secondary {
+  background: transparent;
+  color: var(--brand-primary, #3a2d20);
+  border: 1.5px solid var(--brand-primary, #3a2d20);
+}
+
+.nf-btn--secondary:hover {
+  background: var(--brand-primary, #3a2d20);
+  color: #fff;
+}
+
+.nf-help {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.nf-help span {
+  color: var(--text-muted, #7a6f5a);
+}
+
+.nf-help a {
+  color: var(--brand-primary, #3a2d20);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px dashed var(--brand-accent, #a9763f);
+  padding-bottom: 1px;
+}
+
+.nf-help a:hover {
+  color: var(--brand-accent, #a9763f);
+}
+
+.nf-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted, #7a6f5a);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.nf-phone:hover {
+  color: var(--brand-primary, #3a2d20);
+}

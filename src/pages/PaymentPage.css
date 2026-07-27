@@ -1,0 +1,363 @@
+/* Token Highlight Bar */
+.payment-token-bar {
+  background: linear-gradient(90deg, #2c2118 0%, #3a2d20 50%, #2c2118 100%);
+  padding: 20px 0;
+  border-top: 2px solid rgba(200, 154, 94, 0.5);
+  border-bottom: 1px solid rgba(200, 154, 94, 0.2);
+  box-shadow: 0 4px 24px rgba(14, 64, 111, 0.4);
+}
+
+.payment-token-bar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(18px, 5vw, 64px);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.payment-token-bar__icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(169, 118, 63, 0.18);
+  border: 1.5px solid rgba(169, 118, 63, 0.4);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-accent);
+  flex-shrink: 0;
+}
+
+.payment-token-bar__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.payment-token-bar__amount {
+  font-family: var(--font-family-display);
+  font-size: 2rem;
+  color: var(--brand-accent);
+  line-height: 1;
+}
+
+.payment-token-bar__divider {
+  width: 1px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.payment-token-bar__meta {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.payment-token-bar__meta span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.payment-token-bar__meta strong {
+  color: var(--brand-accent);
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .payment-token-bar__divider { display: none; }
+  .payment-token-bar__meta { gap: 14px; }
+}
+
+/* Plot Plan Grid */
+.pp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .pp-grid { grid-template-columns: 1fr; }
+}
+
+.pp-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(232, 226, 216, 0.78);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 18px 52px rgba(58, 45, 32, 0.1);
+  backdrop-filter: blur(10px);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.pp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 24px 56px rgba(58, 45, 32, 0.1);
+}
+
+.pp-card__header {
+  padding: 26px 24px 22px;
+  position: relative;
+  background: linear-gradient(135deg, #3a2d20, #7a4f24) !important;
+}
+
+.pp-card:nth-child(2) .pp-card__header {
+  background: linear-gradient(135deg, #9c6b34, #a9763f) !important;
+}
+
+.pp-card:nth-child(3) .pp-card__header {
+  background: linear-gradient(135deg, #33271c, #1e3a5c) !important;
+}
+
+.pp-card:nth-child(4) .pp-card__header {
+  background: linear-gradient(135deg, #3a2d20, #7a4f24) !important;
+}
+
+.pp-card__num-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+}
+
+.pp-card__type {
+  font-family: var(--font-family-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 10px;
+}
+
+.pp-card__rate {
+  font-family: var(--font-family-display);
+  font-size: 2.4rem;
+  color: var(--brand-accent);
+  line-height: 1;
+}
+
+.pp-card__rate-label {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.pp-card__body {
+  padding: 22px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pp-card__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid #F0EDE8;
+}
+
+.pp-card__row:last-of-type {
+  border-bottom: none;
+}
+
+.pp-card__row--highlight {
+  background: rgba(169, 118, 63, 0.06);
+  margin: 0 -4px;
+  padding: 11px 4px;
+  border-radius: 8px;
+  border-bottom: none !important;
+}
+
+.pp-card__row-icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(58, 45, 32, 0.07);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-primary);
+  flex-shrink: 0;
+}
+
+.pp-card__row-label {
+  font-size: 0.84rem;
+  color: #7a6f5a;
+  font-weight: 600;
+  flex: 1;
+}
+
+.pp-card__row-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.pp-card__row-value--bold {
+  color: var(--brand-primary);
+}
+
+.pp-card__row-value--accent {
+  color: #b0824a;
+  font-size: 0.96rem;
+}
+
+.pp-card__note {
+  display: none;
+}
+
+.pp-card__btn {
+  margin-top: 18px;
+  width: 100%;
+  padding: 13px;
+  background: var(--brand-primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: var(--font-family-primary);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.pp-card__btn:hover {
+  background: #2c2118;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(58, 45, 32, 0.25);
+}
+
+/* Registry Info Box */
+.payment-registry-box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .payment-registry-box { grid-template-columns: 1fr; }
+}
+
+.payment-registry-card {
+  background:
+    linear-gradient(160deg, rgba(58, 45, 32, 0.98), rgba(36, 50, 71, 0.94));
+  border-radius: 18px;
+  padding: 28px 24px;
+  text-align: center;
+  border: 1px solid rgba(169, 118, 63, 0.18);
+  box-shadow: 0 18px 44px rgba(7, 24, 18, 0.18);
+  transition: transform 0.28s ease;
+}
+
+.payment-registry-card:nth-child(2) {
+  background:
+    linear-gradient(160deg, rgba(58, 45, 32, 0.98), rgba(65, 52, 62, 0.94));
+}
+
+.payment-registry-card:nth-child(3) {
+  background:
+    linear-gradient(160deg, rgba(58, 45, 32, 0.98), rgba(20, 64, 111, 0.92));
+}
+
+.payment-registry-card:hover {
+  transform: translateY(-4px);
+}
+
+.payment-registry-card__icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(169, 118, 63, 0.15);
+  border: 1.5px solid rgba(169, 118, 63, 0.3);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: var(--brand-accent);
+}
+
+.payment-registry-card h3 {
+  font-family: var(--font-family-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-accent);
+  margin: 0 0 10px;
+}
+
+.payment-registry-card p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.68;
+  margin: 0;
+}
+
+.payment-registry-card strong {
+  color: #FFFFFF;
+}
+
+/* Bank Info Grid */
+.payment-bank-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .payment-bank-grid { grid-template-columns: 1fr; }
+}
+
+.payment-bank-card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(232, 226, 216, 0.78);
+  border-radius: 18px;
+  padding: 26px 24px;
+  border-left: 4px solid var(--brand-accent);
+  box-shadow: 0 16px 42px rgba(58, 45, 32, 0.08);
+  backdrop-filter: blur(8px);
+  transition: box-shadow 0.25s ease;
+}
+
+@media (max-width: 768px) {
+  .payment-token-bar {
+    background: linear-gradient(90deg, #2c2118, #3a2d20);
+  }
+}
+
+.payment-bank-card:hover {
+  box-shadow: 0 12px 32px rgba(58, 45, 32, 0.08);
+}
+
+.payment-bank-card__icon {
+  font-size: 2rem;
+  margin-bottom: 14px;
+}
+
+.payment-bank-card__title {
+  font-family: var(--font-family-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+}
+
+.payment-bank-card__desc {
+  font-size: 0.9rem;
+  color: #564e3f;
+  line-height: 1.7;
+  margin: 0;
+}
