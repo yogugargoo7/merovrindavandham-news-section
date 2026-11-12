@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import SplitText from '../fx/SplitText';
+import BtnText from '../fx/BtnText';
 import './Process.css';
 
 const Process = () => {
@@ -56,78 +58,68 @@ const Process = () => {
     { number: 'Quick', label: 'Site Visit Flow' }
   ];
 
-
   return (
-    <section id="process" className="process-section reveal-on-scroll">
-      <div className="process-container">
-        <div className="process-header">
-          <div className="process-badge">
-            <div className="process-badge-icon"></div>
-            Buyer Journey
-          </div>
-          <h2 className="process-title">A simple and conversion-friendly path</h2>
-          <h3 className="process-subtitle">from first enquiry to final booking discussion</h3>
-          <p className="process-description">
+    <section id="process" className="sec sec--sand prc">
+      <div className="wrap prc__grid">
+        <div className="prc__head">
+          <span className="eyebrow" data-reveal="up">Buyer Journey</span>
+          <SplitText as="h2" className="display-l" text={"A simple and *conversion-friendly* path"} />
+          <h3 className="prc__subtitle" data-reveal="up" style={{ '--d': '120ms' }}>from first enquiry to final booking discussion</h3>
+          <p className="prc__description" data-reveal="up" style={{ '--d': '180ms' }}>
             This section keeps the buyer journey practical: understand the requirement, shortlist options, plan the visit,
             review documentation and move toward booking with clearer support.
           </p>
         </div>
 
-        <div className="process-steps-container">
-          <div className="process-steps-grid">
-            {steps.map((step) => (
-              <div key={step.id} className="process-step-card">
-                <div className="process-step-marker">
-                  <div className="process-step-number">{step.number}</div>
-                  <div className="process-step-icon">{step.icon}</div>
-                </div>
-
-                <div className="process-step-body">
-                  <div className="process-step-heading">
-                    <h3 className="process-step-title">{step.title}</h3>
-                    <span className="process-step-timeline">{step.timeline}</span>
-                  </div>
-                  <p className="process-step-description">{step.description}</p>
-
-                  <ul className="process-step-features">
-                    {step.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="process-step-feature">
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+        <div className="prc__steps-wrap" data-progress>
+          <span className="prc__rail" aria-hidden="true"><i /></span>
+          <ol className="prc__steps">
+          {steps.map((step) => (
+            <li key={step.id} className="prc__step" data-reveal="up">
+              <div className="prc__marker">
+                <span className="prc__number">{step.number}</span>
               </div>
-            ))}
-          </div>
+              <div className="prc__body">
+                <div className="prc__heading">
+                  <h3 className="prc__title">{step.title}</h3>
+                  <span className="prc__tags">
+                    <span>{step.timeline}</span>
+                    <span>{step.icon}</span>
+                  </span>
+                </div>
+                <p className="prc__text">{step.description}</p>
+                <ul className="prc__features">
+                  {step.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          ))}
+          </ol>
         </div>
+      </div>
 
-        <div className="process-cta">
-          <div className="process-cta-content">
-            <h3 className="process-cta-title">Ready to move from browsing to a real conversation?</h3>
-            <p className="process-cta-subtitle">
+      <div className="wrap">
+        <div className="prc__cta on-dark" data-reveal="up">
+          <div className="prc__cta-copy">
+            <h3 className="display-m">Ready to move from browsing to a real conversation?</h3>
+            <p>
               Use the brochure, buyer highlights and the enquiry form so your next step is informed,
               faster and more serious.
             </p>
-
-            <div className="process-cta-buttons">
-              <Link to="/contact" className="process-cta-primary">
-                Send an Enquiry
-              </Link>
-
-              <Link to="/plots" className="process-cta-secondary">
-                View Plot Options
-              </Link>
+            <div className="btn-row">
+              <Link to="/contact" className="btn btn--gold"><BtnText>Send an Enquiry</BtnText></Link>
+              <Link to="/plots" className="btn btn--line"><BtnText>View Plot Options</BtnText></Link>
             </div>
-
-            <div className="process-stats">
-              {stats.map((stat, index) => (
-                <div key={index} className="process-stat">
-                  <span className="process-stat-number">{stat.number}</span>
-                  <span className="process-stat-label">{stat.label}</span>
-                </div>
-              ))}
-            </div>
+          </div>
+          <div className="prc__stats">
+            {stats.map((stat) => (
+              <div key={stat.label} className="prc__stat">
+                <span className="prc__stat-number">{stat.number}</span>
+                <span className="prc__stat-label">{stat.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

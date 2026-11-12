@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 import Header from './components/Header/Header';
@@ -7,6 +7,12 @@ import LeadChatBot from './components/ChatBot/LeadChatbot.jsx';
 import QuickLeadModal from './components/QuickLeadModal/QuickLeadModal.jsx';
 import FloatingContact from './components/FloatingContact/FloatingContact.jsx';
 import SocialDock from './components/SocialDock/SocialDock.jsx';
+
+import SmoothScroll from './components/fx/SmoothScroll.jsx';
+import MotionManager from './components/fx/MotionManager.jsx';
+import PageTransition from './components/fx/PageTransition.jsx';
+import Preloader from './components/fx/Preloader.jsx';
+import ScrollUI from './components/fx/ScrollUI.jsx';
 
 import HomePage from './pages/HomePage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
@@ -17,43 +23,21 @@ import PaymentPage from './pages/PaymentPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 
+import { scrollToTop } from './utils/scrollLock';
 import './styles/effects.css';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
+  // layout effect: jump before the new page paints (it is under the curtain)
+  useLayoutEffect(() => {
+    scrollToTop({ immediate: true });
   }, [pathname]);
   return null;
 }
 
 function AppContent() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [showBackToTop, setShowBackToTop] = useState(false);
   const [showAutoLeadPopup, setShowAutoLeadPopup] = useState(false);
-  const lastBackToTopState = useRef(false);
   const { pathname: routeKey } = useLocation();
-
-  // Scroll progress + back-to-top
-  useEffect(() => {
-    let frameId = 0;
-    const update = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0);
-      const shouldShow = scrollTop > 300;
-      if (lastBackToTopState.current !== shouldShow) {
-        lastBackToTopState.current = shouldShow;
-        setShowBackToTop(shouldShow);
-      }
-      frameId = 0;
-    };
-    const onScroll = () => { if (frameId) return; frameId = window.requestAnimationFrame(update); };
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    return () => { if (frameId) window.cancelAnimationFrame(frameId); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
-  }, []);
 
   // Auto lead popup — once per session, well after the page has loaded
   useEffect(() => {
@@ -71,20 +55,17 @@ function AppContent() {
   }, []);
 
   return (
-    <div className="min-h-screen app-shell">
-      <div
-        className="scroll-progress-bar"
-        style={{ transform: `scaleX(${scrollProgress / 100})` }}
-        role="progressbar"
-        aria-valuenow={Math.round(scrollProgress)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-      />
+    <div className="app-shell">
+      <SmoothScroll />
+      <MotionManager />
+      <Preloader />
+      <PageTransition />
+      <ScrollUI />
 
       <ScrollToTop />
       <Header />
 
-      <div className="route-transition" key={routeKey}>
+      <main className="route-transition" key={routeKey}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -95,7 +76,7 @@ function AppContent() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </div>
+      </main>
 
       <Footer />
       <SocialDock />
@@ -109,16 +90,6 @@ function AppContent() {
         source="Auto Lead Popup"
         actionLabel="Submit Details"
       />
-
-      <button
-        className={`back-to-top gold-pulse${showBackToTop ? ' visible' : ''}`}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        aria-label="Back to top"
-      >
-        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-        </svg>
-      </button>
     </div>
   );
 }

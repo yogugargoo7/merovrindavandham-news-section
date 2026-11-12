@@ -2,3 +2,7 @@ node_modules
 dist
 public/vrindavan-material/informative-mero-vrindavan-dham.mp4
 public/vrindavan-material/radha-rani-mansarovar.mp4
+_originals-backup
+*.zip
+*.log
+1.pdf

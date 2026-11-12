@@ -1,28 +1,29 @@
+/* =====================================================================
+   FLOATING CALL / WHATSAPP (renders only when SALES_PHONE is set)
+   ===================================================================== */
 .floating-contact {
   position: fixed;
-  left: 16px;
-  bottom: 20px;
+  left: 20px;
+  bottom: 24px;
+  z-index: 480;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  z-index: 60;
+  gap: 10px;
 }
 
 .floating-contact__btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   color: #fff;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 14px 36px -10px rgba(0, 0, 0, 0.45);
+  transition: transform 0.5s var(--ease-out), box-shadow 0.4s ease;
 }
 
 .floating-contact__btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+  transform: translateY(-3px) scale(1.04);
 }
 
 .floating-contact__btn--whatsapp {
@@ -31,7 +32,9 @@
 }
 
 .floating-contact__btn--call {
-  background: var(--brand-primary, #3a2d20);
+  background: var(--ink);
+  color: var(--gold-light);
+  border: 1px solid rgba(var(--paper-rgb), 0.14);
 }
 
 @keyframes fc-pulse {
@@ -42,13 +45,7 @@
 
 @media (max-width: 768px) {
   .floating-contact {
-    left: 12px;
-    bottom: 16px;
-  }
-
-  /* comfortable thumb-size tap targets on phones */
-  .floating-contact__btn {
-    width: 56px;
-    height: 56px;
+    left: 14px;
+    bottom: 18px;
   }
 }

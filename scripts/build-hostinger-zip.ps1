@@ -21,20 +21,26 @@ try {
   }
 
   Write-Host "Creating Hostinger ZIP with real folders..."
-  tar.exe -a -c -f $zipPath -C $distDir .
+  # Pass each top-level item by name so entries are "index.html", "assets/..."
+  # (no "./" prefix, which some extractors turn into an extra folder)
+  $topLevel = Get-ChildItem -LiteralPath $distDir -Force | ForEach-Object { $_.Name }
+  tar.exe -a -c -f $zipPath -C $distDir @topLevel
+  if ($LASTEXITCODE -ne 0) {
+    throw "ZIP creation failed."
+  }
 
   $entries = tar.exe -tf $zipPath
-  $badEntries = $entries | Where-Object { $_ -match "\\" }
+  $badEntries = $entries | Where-Object { $_ -match "\\" -or $_ -match "^\./" }
   if ($badEntries) {
-    throw "ZIP contains Windows backslash paths. Do not upload this ZIP."
+    throw "ZIP contains backslash or ./ paths. Do not upload this ZIP."
   }
 
   $requiredEntries = @(
-    "./index.html",
-    "./.htaccess",
-    "./api-proxy.php",
-    "./assets/",
-    "./vrindavan-material/"
+    "index.html",
+    ".htaccess",
+    "api-proxy.php",
+    "assets/",
+    "vrindavan-material/"
   )
 
   foreach ($entry in $requiredEntries) {

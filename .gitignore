@@ -5,3 +5,7 @@ dist
 *.log
 *.zip
 _originals-backup/
+
+# local tool settings and loose files
+.claude/
+*.pdf

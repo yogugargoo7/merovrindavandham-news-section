@@ -1,13 +1,12 @@
-@import "tailwindcss";
+/* Base layer — the design system lives in src/styles/*.css */
 
 html {
-  scroll-behavior: smooth;
   overflow-x: clip;
 }
 
 body {
   overflow-x: clip;
-  background: #FFFFFF;
+  background: var(--paper);
 }
 
 #root {
@@ -22,5 +21,5 @@ iframe {
 }
 
 section[id] {
-  scroll-margin-top: 110px;
+  scroll-margin-top: 96px;
 }

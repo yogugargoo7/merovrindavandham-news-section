@@ -1,12 +1,18 @@
 import './LocationMap.css';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import SplitText from '../fx/SplitText';
+import BtnText from '../fx/BtnText';
+import ShareLocation from '../ShareLocation/ShareLocation';
 import { trackConversionEvent } from '../../utils/analytics';
+import { PROJECT_LOCATION as exactPlotLocation } from '../../config/location';
 
-const exactPlotLocation = {
-  coordinates: '27.6349678,77.7368851',
-  mapsUrl: 'https://maps.app.goo.gl/rfQE3UG4GS3gfh998',
-};
+const PinIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+  </svg>
+);
 
 const LocationMap = () => {
   const [isMapLoaded, setIsMapLoaded] = useState(true);
@@ -79,131 +85,101 @@ const LocationMap = () => {
   };
 
   return (
-    <section id="location" className="location-section reveal-on-scroll">
-      <div className="location-container">
-        <div className="location-header">
-          <div className="location-badge">
-            <div className="location-badge-icon"></div>
-            Prime Location
+    <section id="location" className="sec sec--paper loc">
+      <div className="wrap">
+        <div className="sec-head sec-head--split">
+          <span className="eyebrow" data-reveal="up">Prime Location</span>
+          <div className="loc__titles">
+            <SplitText as="h2" className="display-l" text={"Location &\n*Connectivity*"} />
+            <h3 className="loc__subtitle" data-reveal="up" style={{ '--d': '160ms' }}>Near Vrindavan, Mathura</h3>
           </div>
-          <h2 className="location-title">
-            Location & Connectivity
-          </h2>
-          <h3 className="location-subtitle">
-            Near Vrindavan, Mathura
-          </h3>
-          <p className="location-description">
+          <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
             Open the route, confirm the exact project pin and plan your site visit with the sales team before travelling.
           </p>
         </div>
 
-        <div className="location-content-grid">
-          <div className="location-map-container">
-            <div className="location-map-wrapper">
+        <div className="loc__grid">
+          <div className="loc__map-col" data-reveal="up">
+            <div className="loc__map">
               {isMapLoaded ? (
                 <iframe
                   src={`https://maps.google.com/maps?q=${exactPlotLocation.coordinates}&z=16&output=embed`}
-                  className="location-map-iframe"
+                  className="loc__iframe"
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Mero Vrindavan Dham Township Location Map - Vrindavan, Mathura"
                 ></iframe>
               ) : (
-                <button type="button" className="location-map-placeholder" onClick={() => {
+                <button type="button" className="loc__placeholder" onClick={() => {
                   trackConversionEvent('map_load_click', 'Location Section');
                   setIsMapLoaded(true);
                 }}>
-                  <span className="location-map-placeholder-pin">Map</span>
+                  <span className="loc__placeholder-pin">Map</span>
                   <strong>Load Location Map</strong>
                   <span>Tap to view the Google Map preview.</span>
                 </button>
               )}
-              <div className="location-map-overlay">
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                </svg>
+              <div className="loc__chip">
+                <PinIcon />
                 Exact Plot Location
               </div>
-              <div className="location-map-pin" aria-hidden="true">
-                <span className="location-map-pin-head"></span>
-                <span className="location-map-pin-shadow"></span>
-              </div>
             </div>
-            <div className="location-map-controls">
-              <button
-                onClick={handleGetDirections}
-                className="location-directions-btn"
-              >
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                </svg>
-                Get Directions
+            <div className="loc__controls">
+              <button onClick={handleGetDirections} className="btn btn--ink">
+                <BtnText icon={<PinIcon />}>Get Directions</BtnText>
               </button>
+              <ShareLocation source="Location Section" />
               <Link
                 to="/contact"
                 onClick={() => trackConversionEvent('site_visit_enquiry_click', 'Location Site Visit')}
-                className="location-directions-btn location-directions-btn--secondary"
+                className="btn btn--line"
               >
-                Confirm Site Visit
+                <BtnText>Confirm Site Visit</BtnText>
               </Link>
-              <p className="location-map-note">
-                Confirm the exact project pin with the sales team before planning your visit.
-              </p>
             </div>
+            <p className="loc__note">
+              Confirm the exact project pin with the sales team before planning your visit.
+            </p>
           </div>
 
-          <div className="location-landmarks">
-            <div className="location-landmarks-header">
-              <h3 className="location-landmarks-title">
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                </svg>
+          <div className="loc__landmarks">
+            <div className="loc__landmarks-head" data-reveal="up">
+              <h3 className="loc__landmarks-title">
+                <PinIcon />
                 Nearby access points
               </h3>
-              <p className="location-landmarks-subtitle">
-                Tap any item to open it in Google Maps.
-              </p>
+              <p className="loc__landmarks-sub">Tap any item to open it in Google Maps.</p>
             </div>
 
-            <div className="location-landmarks-grid">
+            <div className="loc__list" data-reveal="stagger">
               {nearbyLandmarks.map((landmark) => (
-                <div
+                <button
+                  type="button"
                   key={landmark.id}
-                  className="location-landmark-card"
+                  className="loc__landmark"
                   onClick={() => handleLandmarkClick(landmark)}
                 >
-                  <div className="location-landmark-content">
-                    <div className="location-landmark-marker">
-                      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                      </svg>
-                    </div>
-                    <div className="location-landmark-info">
-                      <div className="location-landmark-icon">
-                        {landmark.icon}
-                      </div>
-                      <h4 className="location-landmark-name">{landmark.name}</h4>
-                      <p className="location-landmark-description">{landmark.description}</p>
-                    </div>
-                    <div className="location-landmark-stats">
-                      <div className="location-landmark-type">
-                        <span>{landmark.type}</span>
-                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M9 7h8v8" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  <span className="loc__landmark-icon">{landmark.icon}</span>
+                  <span className="loc__landmark-info">
+                    <span className="loc__landmark-name">{landmark.name}</span>
+                    <span className="loc__landmark-desc">{landmark.description}</span>
+                  </span>
+                  <span className="loc__landmark-type">
+                    <span>{landmark.type}</span>
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M9 7h8v8" />
+                    </svg>
+                  </span>
+                </button>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="location-highlight-strip">
+        <div className="loc__highlights" data-reveal="stagger">
           {locationHighlights.map((item) => (
-            <div className="location-highlight-card" key={item.label}>
+            <div className="loc__highlight" key={item.label}>
               <span>{item.label}</span>
               <strong>{item.value}</strong>
               <p>{item.note}</p>
@@ -211,26 +187,26 @@ const LocationMap = () => {
           ))}
         </div>
 
-        <div className="location-connectivity">
-          <div className="location-connectivity-content">
-            <h3 className="location-connectivity-title">
-              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        <div className="loc__connect on-dark" data-reveal="up">
+          <div className="loc__connect-copy">
+            <h3 className="loc__connect-title">
+              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               Simple travel overview
             </h3>
-            <p className="location-connectivity-description">
+            <p>
               A cleaner view of the practical location points buyers usually ask about
               before booking a call or site visit.
             </p>
-            <div className="location-connectivity-stats">
-              {connectivityStats.map((stat, index) => (
-                <div key={index} className="location-connectivity-stat">
-                  <div className="location-connectivity-stat-number">{stat.number}</div>
-                  <div className="location-connectivity-stat-label">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+          </div>
+          <div className="loc__connect-stats">
+            {connectivityStats.map((stat) => (
+              <div key={stat.number} className="loc__connect-stat">
+                <div className="loc__connect-num">{stat.number}</div>
+                <div className="loc__connect-label">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

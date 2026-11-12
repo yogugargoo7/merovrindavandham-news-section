@@ -1,9 +1,11 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import useReveal from '../hooks/useReveal';
 import { useSEO } from '../hooks/useSEO';
 import Hero from '../components/Hero/Hero';
 import Testimonials from '../components/Testimonials/Testimonials';
 import EnquirySection from '../components/EnquirySection/EnquirySection';
+import SplitText from '../components/fx/SplitText';
+import BtnText from '../components/fx/BtnText';
 import { publicAsset } from '../utils/publicAsset';
 import './HomePage.css';
 
@@ -12,6 +14,13 @@ const homePaymentPlans = [
   { size: '100 Sq. Yd.', type: 'Normal Plot', rate: 'Rs 16,000/Sq. Yd.', total: 'Rs 16,00,000', booking: 'Rs 6,40,000', featured: true },
   { size: '150 Sq. Yd.', type: 'Corner Plot', rate: 'Rs 18,000/Sq. Yd.', total: 'Rs 27,00,000', booking: 'Rs 10,80,000' },
   { size: '30 Sq. Yd.', type: 'Commercial Plot', rate: 'Rs 20,000/Sq. Yd.', total: 'Rs 6,00,000', booking: 'Rs 2,40,000' },
+];
+
+const trustItems = [
+  { label: 'Clear Documentation' },
+  { label: 'Guided Site Visits Every Week' },
+  { label: 'Token Booking from Rs. 11,000' },
+  { label: 'Quick Response Team' },
 ];
 
 const investReasons = [
@@ -76,201 +85,293 @@ const HOME_SEO = {
   ogUrl: 'https://merovrindavandham.com/',
 };
 
+// Vertical scroll drives a horizontal track while the section is pinned (desktop).
+const usePinnedTrack = () => {
+  const sectionRef = useRef(null);
+  const trackRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const track = trackRef.current;
+    if (!section || !track) return undefined;
+
+    const mq = window.matchMedia('(min-width: 1024px) and (prefers-reduced-motion: no-preference)');
+    let distance = 0;
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      if (!distance) return;
+      const top = section.getBoundingClientRect().top;
+      const p = Math.min(1, Math.max(0, -top / distance));
+      track.style.transform = `translate3d(${(-p * distance).toFixed(1)}px, 0, 0)`;
+      section.style.setProperty('--gp', p.toFixed(4));
+    };
+
+    const measure = () => {
+      if (!mq.matches) {
+        distance = 0;
+        section.style.height = '';
+        track.style.transform = '';
+        section.style.setProperty('--gp', '0');
+        return;
+      }
+      distance = Math.max(0, track.scrollWidth - track.clientWidth);
+      section.style.height = `${window.innerHeight + distance}px`;
+      update();
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    measure();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
+    mq.addEventListener('change', measure);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', measure);
+      mq.removeEventListener('change', measure);
+    };
+  }, []);
+
+  return { sectionRef, trackRef };
+};
+
 const HomePage = () => {
-  useReveal();
   useSEO(HOME_SEO);
+  const { sectionRef, trackRef } = usePinnedTrack();
 
   return (
     <>
       <Hero />
 
       {/* TRUST STRIP */}
-      <div className="hp-trust-strip">
-        <div className="hp-container">
-          <div className="hp-trust-inner">
-            <div className="hp-trust-item">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span>Clear Documentation</span>
+      <div className="hp-trust on-dark" aria-label="Buyer assurances">
+        <div className="marquee">
+          {[0, 1].map((copy) => (
+            <div className="marquee__track" key={copy} aria-hidden={copy === 1 || undefined}>
+              {/* items twice per track so one track is wider than any screen (no gap) */}
+              {[...trustItems, ...trustItems].map((item, i) => (
+                <div className="hp-trust__item" key={`${item.label}-${i}`} aria-hidden={i >= trustItems.length || undefined}>
+                  <span>{item.label}</span>
+                </div>
+              ))}
             </div>
-            <div className="hp-trust-sep" />
-            <div className="hp-trust-item">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              </svg>
-              <span>Guided Site Visits Every Week</span>
-            </div>
-            <div className="hp-trust-sep" />
-            <div className="hp-trust-item">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Token Booking from Rs. 11,000</span>
-            </div>
-            <div className="hp-trust-sep" />
-            <div className="hp-trust-item">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <span>Quick Response Team</span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
       {/* INTRO */}
-      <section className="hp-intro reveal-on-scroll">
-        <div className="hp-container hp-intro__inner">
-          <div className="hp-intro__text">
-            <span className="hp-kicker">Mero Vrindavan Dham</span>
-            <h2 className="hp-heading">A Planned Township at the<br />Heart of Vrindavan's Growth</h2>
-            <p className="hp-para">
+      <section className="sec sec--paper hp-intro">
+        <div className="wrap hp-intro__grid">
+          <div className="hp-intro__copy">
+            <span className="eyebrow" data-reveal="up">Mero Vrindavan Dham</span>
+            <SplitText
+              as="h2"
+              className="display-l hp-intro__title"
+              text={"A Planned Township at the Heart of *Vrindavan's* Growth"}
+            />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
               Residential and commercial plots from 30 to 150 Sq. Yd. in a 15-acre planned township near Vrindavan, Mathura.
               Clear documents, transparent payment plans, and weekly guided site visits.
             </p>
-            <p className="hp-para hp-para--muted">
+            <p className="hp-intro__note" data-reveal="up" style={{ '--d': '220ms' }}>
               Token booking starts at <strong>Rs. 11,000</strong> as per the latest payment plan. Confirm written terms before booking.
             </p>
-            <div className="hp-intro__actions">
-              <Link to="/plots" className="hp-btn hp-btn--primary">View Plots &amp; Pricing</Link>
-              <Link to="/contact" className="hp-btn hp-btn--outline">Book Site Visit</Link>
+            <div className="btn-row" data-reveal="up" style={{ '--d': '300ms' }}>
+              <Link to="/plots" className="btn btn--ink"><BtnText>View Plots &amp; Pricing</BtnText></Link>
+              <Link to="/contact" className="btn btn--line"><BtnText>Book Site Visit</BtnText></Link>
             </div>
           </div>
-          <div className="hp-payment-grid">
+
+          <div className="hp-price-grid" data-reveal="stagger">
             {homePaymentPlans.map((plan) => (
-              <div key={plan.size} className={`hp-payment-card${plan.featured ? ' hp-payment-card--featured' : ''}`}>
-                <div className="hp-payment-card__size">{plan.size}</div>
-                <div className="hp-payment-card__rate">{plan.rate}</div>
-                <div className="hp-payment-card__caption">Basic Sale Price</div>
-                <h3>{plan.type}</h3>
-                <div className="hp-payment-card__box">
-                  <span>Total Price</span>
-                  <strong>{plan.total}</strong>
+              <article key={plan.size} className={`hp-price${plan.featured ? ' hp-price--featured' : ''}`}>
+                <div className="hp-price__top">
+                  <span className="hp-price__size">{plan.size}</span>
+                  <h3 className="hp-price__type">{plan.type}</h3>
                 </div>
-                <div className="hp-payment-card__box">
-                  <span>Booking Amount 40%</span>
-                  <strong>{plan.booking}</strong>
-                </div>
-                <ul className="hp-payment-card__list">
+                <div className="hp-price__rate">{plan.rate}</div>
+                <div className="hp-price__caption">Basic Sale Price</div>
+                <dl className="hp-price__rows">
+                  <div>
+                    <dt>Total Price</dt>
+                    <dd>{plan.total}</dd>
+                  </div>
+                  <div>
+                    <dt>Booking Amount 40%</dt>
+                    <dd>{plan.booking}</dd>
+                  </div>
+                </dl>
+                <ul className="hp-price__list">
                   <li>Token amount Rs 11,000</li>
                   <li>40% booking within 7 days</li>
                   <li>Balance in 6 to 12 months</li>
                 </ul>
-                <Link to="/payment" className="hp-payment-card__btn">Get Payment Details</Link>
-              </div>
+                <Link to="/payment" className="hp-price__btn">
+                  <span>Get Payment Details</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </Link>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="hp-video-section reveal-on-scroll" aria-label="Project video">
-        <div className="hp-container">
-          <div className="hp-section-head">
-            <span className="hp-kicker">Project Video</span>
-            <h2 className="hp-heading">Watch the Complete Project Walkthrough</h2>
-            <p className="hp-para hp-para--muted">See the township layout, internal roads, plot demarcation and surroundings before you plan your site visit.</p>
+      {/* VIDEO + LAYOUT */}
+      <section className="sec sec--paper hp-video" aria-label="Project video">
+        <div className="wrap">
+          <div className="sec-head sec-head--split">
+            <span className="eyebrow" data-reveal="up">Project Video</span>
+            <SplitText as="h2" className="display-l" text={"Watch the Complete\n*Project Walkthrough*"} />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
+              See the township layout, internal roads, plot demarcation and surroundings before you plan your site visit.
+            </p>
           </div>
         </div>
-        <div className="hp-video-frame">
-          <video
-            src={publicAsset('vrindavan-material/informative-mero-vrindavan-dham-web.mp4')}
-            poster={publicAsset('vrindavan-material/drone-view-mvd-3d.webp')}
-            controls
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-          />
-        </div>
-        <div className="hp-layout-plan">
-          <div className="hp-container">
-            <div className="hp-layout-plan__head">
-              <span className="hp-kicker">Township Layout</span>
-              <h2 className="hp-heading">Proposed Layout Plan</h2>
-              <p className="hp-para hp-para--muted">Review the block planning, road network and plot demarcation before shortlisting your preferred plot.</p>
-            </div>
-          </div>
-          <figure className="hp-layout-plan__figure">
-            <img
-              src={publicAsset('vrindavan-material/layout-plan-2026.jpeg')}
-              alt="Mero Vrindavan Dham proposed layout plan with plot blocks and road network"
-              loading="lazy"
+        <div className="hp-video__stage" data-progress>
+          <div className="hp-video__frame">
+            <video
+              src={publicAsset('vrindavan-material/informative-mero-vrindavan-dham-web.mp4')}
+              poster={publicAsset('vrindavan-material/drone-view-mvd-3d.webp')}
+              controls
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
             />
+          </div>
+        </div>
+
+        <div className="wrap hp-layout">
+          <div className="sec-head sec-head--split">
+            <span className="eyebrow" data-reveal="up">Township Layout</span>
+            <SplitText as="h2" className="display-l" text={"Proposed *Layout Plan*"} />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
+              Review the block planning, road network and plot demarcation before shortlisting your preferred plot.
+            </p>
+          </div>
+          <figure className="hp-layout__figure" data-reveal="up">
+            <span className="hp-layout__corner hp-layout__corner--tl" aria-hidden="true" />
+            <span className="hp-layout__corner hp-layout__corner--tr" aria-hidden="true" />
+            <span className="hp-layout__corner hp-layout__corner--bl" aria-hidden="true" />
+            <span className="hp-layout__corner hp-layout__corner--br" aria-hidden="true" />
+            <div className="hp-layout__scroll">
+              <img
+                src={publicAsset('vrindavan-material/layout-plan-2026.jpeg')}
+                alt="Mero Vrindavan Dham proposed layout plan with plot blocks and road network"
+                loading="lazy"
+              />
+            </div>
           </figure>
         </div>
       </section>
 
       {/* WHY INVEST */}
-      <section className="hp-invest reveal-on-scroll">
-        <div className="hp-container">
-          <div className="hp-section-head">
-            <span className="hp-kicker hp-kicker--light">Why Invest Here</span>
-            <h2 className="hp-heading hp-heading--light">3 Reasons Smart Buyers<br />Choose Vrindavan Now</h2>
-            <p className="hp-para hp-para--light">Location, infrastructure and spiritual relevance in one township.</p>
+      <section className="sec sec--ink on-dark grain hp-invest">
+        <div className="hp-invest__glow" aria-hidden="true" />
+        <div className="wrap">
+          <div className="sec-head sec-head--center">
+            <span className="eyebrow" data-reveal="up">Why Invest Here</span>
+            <SplitText as="h2" className="display-l" text={"3 Reasons Smart Buyers\nChoose *Vrindavan* Now"} />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
+              Location, infrastructure and spiritual relevance in one township.
+            </p>
           </div>
-          <div className="hp-invest-grid">
+
+          <div className="hp-invest__grid" data-reveal="stagger">
             {investReasons.map((r) => (
-              <div key={r.num} className="hp-invest-card">
-                <div className="hp-invest-card__top">
-                  <div className="hp-invest-card__icon">{r.icon}</div>
-                  <span className="hp-invest-card__tag">{r.tag}</span>
+              <article key={r.num} className="hp-invest__card">
+                <div className="hp-invest__num" aria-hidden="true">{r.num}</div>
+                <div className="hp-invest__top">
+                  <div className="hp-invest__icon">{r.icon}</div>
+                  <span className="hp-invest__tag">{r.tag}</span>
                 </div>
-                <div className="hp-invest-card__num">{r.num}</div>
-                <h3 className="hp-invest-card__title">{r.title}</h3>
-                <p className="hp-invest-card__body">{r.body}</p>
-              </div>
+                <h3 className="hp-invest__title">{r.title}</h3>
+                <p className="hp-invest__body">{r.body}</p>
+              </article>
             ))}
           </div>
-          <div className="hp-invest-cta">
-            <Link to="/plots" className="hp-btn hp-btn--gold">See All Plot Options</Link>
+
+          <div className="hp-invest__cta" data-reveal="up">
+            <Link to="/plots" className="btn btn--gold"><BtnText>See All Plot Options</BtnText></Link>
           </div>
         </div>
       </section>
 
-      {/* SITE GALLERY */}
-      <section className="hp-gallery reveal-on-scroll">
-        <div className="hp-container">
-          <div className="hp-section-head">
-            <span className="hp-kicker">Project Gallery</span>
-            <h2 className="hp-heading">See the Site Before You Decide</h2>
-            <p className="hp-para hp-para--muted">Real visuals of the project layout, roads, entrance and the surrounding township.</p>
+      {/* SITE GALLERY — pinned horizontal track on desktop, swipe on touch */}
+      <section className="hp-gallery" ref={sectionRef}>
+        <div className="hp-gallery__sticky">
+          <div className="wrap hp-gallery__head">
+            <div>
+              <span className="eyebrow" data-reveal="up">Project Gallery</span>
+              <SplitText as="h2" className="display-l" text={"See the Site\n*Before You Decide*"} />
+            </div>
+            <div className="hp-gallery__aside" data-reveal="up" style={{ '--d': '150ms' }}>
+              <p className="lede">Real visuals of the project layout, roads, entrance and the surrounding township.</p>
+              <Link to="/gallery" className="btn btn--line"><BtnText>View Full Gallery</BtnText></Link>
+            </div>
           </div>
-          <div className="hp-gallery__grid">
-            {sitePhotos.map((photo) => (
-              <div key={photo.src} className="hp-gallery__item">
-                <img src={photo.src} alt={photo.label} loading="lazy" />
-                <span className="hp-gallery__label">{photo.label}</span>
-              </div>
+
+          <div className="hp-gallery__track" ref={trackRef}>
+            {sitePhotos.map((photo, i) => (
+              <Link
+                key={photo.src}
+                to="/gallery"
+                className="hp-gallery__item"
+                aria-label={`${photo.label} - open gallery`}
+              >
+                <div className="hp-gallery__media media" data-reveal="img" style={{ '--d': `${Math.min(i, 3) * 90}ms` }}>
+                  <img src={photo.src} alt={photo.label} loading="lazy" />
+                </div>
+                <div className="hp-gallery__meta">
+                  <span>{String(i + 1).padStart(2, '0')}</span>
+                  <strong className="hp-gallery__label">{photo.label}</strong>
+                </div>
+              </Link>
             ))}
           </div>
-          <div className="hp-gallery__cta">
-            <Link to="/gallery" className="hp-btn hp-btn--outline">View Full Gallery</Link>
+
+          <div className="wrap hp-gallery__progress" aria-hidden="true">
+            <span className="hp-gallery__hint">Scroll to explore</span>
+            <span className="hp-gallery__bar"><i /></span>
           </div>
         </div>
       </section>
 
       {/* BUYING PROCESS */}
-      <section className="hp-process reveal-on-scroll">
-        <div className="hp-container">
-          <div className="hp-section-head">
-            <span className="hp-kicker">How to Buy</span>
-            <h2 className="hp-heading">Book Your Plot in 4 Easy Steps</h2>
-            <p className="hp-para hp-para--muted">From shortlisting to booking, the process is transparent and no-pressure.</p>
+      <section className="sec sec--sand hp-process">
+        <div className="wrap">
+          <div className="sec-head sec-head--split">
+            <span className="eyebrow" data-reveal="up">How to Buy</span>
+            <SplitText as="h2" className="display-l" text={"Book Your Plot in\n*4 Easy Steps*"} />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
+              From shortlisting to booking, the process is transparent and no-pressure.
+            </p>
           </div>
-          <div className="hp-steps">
-            {steps.map(([num, title, text]) => (
-              <div key={title} className="hp-step">
-                <div className="hp-step__num">{num}</div>
-                <h3 className="hp-step__title">{title}</h3>
-                <p className="hp-step__text">{text}</p>
-              </div>
-            ))}
+
+          <div className="hp-steps-wrap" data-progress>
+            <span className="hp-steps__rail" aria-hidden="true"><i /></span>
+            <ol className="hp-steps">
+              {steps.map(([num, title, text], i) => (
+                <li key={title} className="hp-step" data-reveal="up" style={{ '--d': `${i * 110}ms` }}>
+                  <span className="hp-step__dot" aria-hidden="true" />
+                  <div className="hp-step__num">{num}</div>
+                  <h3 className="hp-step__title">{title}</h3>
+                  <p className="hp-step__text">{text}</p>
+                </li>
+              ))}
+            </ol>
           </div>
-          <div className="hp-process__cta">
-            <Link to="/payment" className="hp-btn hp-btn--primary">View Payment Plan</Link>
-            <Link to="/contact" className="hp-btn hp-btn--outline">Talk to Our Team</Link>
+
+          <div className="btn-row hp-process__cta" data-reveal="up">
+            <Link to="/payment" className="btn btn--ink"><BtnText>View Payment Plan</BtnText></Link>
+            <Link to="/contact" className="btn btn--line"><BtnText>Talk to Our Team</BtnText></Link>
           </div>
         </div>
       </section>

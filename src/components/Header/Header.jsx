@@ -3,6 +3,7 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import './Header.css';
 import logo from '../../assets/siteImages/VrindavanLogoSmall.webp';
 import { hasSalesPhone, SALES_PHONE, telHref } from '../../config/contact';
+import { lockScroll, unlockScroll } from '../../utils/scrollLock';
 
 const PORTAL_URL = import.meta.env.VITE_CRM_PORTAL_URL || 'https://www.platinumtownship.in/login';
 
@@ -24,75 +25,107 @@ const navItems = [
   { label: 'Find Us',           to: '/contact' },
 ];
 
+const socials = [
+  { label: 'Instagram', href: 'https://www.instagram.com/merovrindavandhamtownship/' },
+  { label: 'Facebook', href: 'https://www.facebook.com/share/1HmRotdT2k/' },
+  { label: 'YouTube', href: 'https://youtube.com/@subhsankalpestate' },
+];
+
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    let lastY = window.scrollY;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      if (Math.abs(y - lastY) > 6) {
+        setHidden(y > lastY && y > 420);
+        lastY = y;
+      }
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
-  // close mobile menu on route change (state adjustment during render,
+  // close menu on route change (state adjustment during render,
   // see react.dev "you might not need an effect")
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
     setMenuOpen(false);
+    setHidden(false);
   }
 
-  // lock body scroll when menu open
+  // lock page scroll while the menu is open
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    if (!menuOpen) return undefined;
+    lockScroll();
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      unlockScroll();
+      window.removeEventListener('keydown', onKey);
+    };
   }, [menuOpen]);
 
+  const headerClass = [
+    'hdr',
+    scrolled && 'hdr--scrolled',
+    hidden && !menuOpen && 'hdr--hidden',
+    menuOpen && 'hdr--open',
+  ].filter(Boolean).join(' ');
 
   return (
     <>
-      <header className={`hdr${scrolled ? ' hdr--scrolled' : ''}`}>
+      <header className={headerClass}>
         <div className="hdr__topbar">
           <div className="hdr__topbar-inner">
-            <div className="hdr__topbar-info">
-              <span>Free site visit support</span>
-              {hasSalesPhone && (
-                <a className="hdr__topbar-call" href={telHref}>Call Now: {SALES_PHONE}</a>
-              )}
-            </div>
+            <span className="hdr__topbar-note">
+              <i aria-hidden="true" />
+              Free site visit support
+            </span>
+            {hasSalesPhone && (
+              <a className="hdr__topbar-call" href={telHref}>Call Now: {SALES_PHONE}</a>
+            )}
           </div>
         </div>
-        <div className="hdr__inner">
 
-          {/* Logo */}
+        <div className="hdr__inner">
           <Link to="/" className="hdr__logo" aria-label="Mero Vrindavan Dham">
-            <img src={logo} alt="Mero Vrindavan Dham logo" />
-            <div className="hdr__logo-text">
+            <img src={logo} alt="Mero Vrindavan Dham logo" width="52" height="52" />
+            <span className="hdr__logo-text">
               <span className="hdr__logo-name">MERO VRINDAVAN DHAM</span>
               <span className="hdr__logo-sub">Premium Township</span>
-            </div>
+            </span>
           </Link>
 
-          {/* Desktop Nav */}
           <nav className="hdr__nav" aria-label="Main navigation">
-            {navItems.map(item => (
+            {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.to === '/'}
                 className={({ isActive }) => `hdr__link${isActive ? ' hdr__link--active' : ''}`}
               >
-                {item.label}
+                <span className="hdr__link-roll"><span>{item.label}</span></span>
               </NavLink>
             ))}
           </nav>
 
-          {/* CTA */}
           <div className="hdr__actions">
-
-            {/* Login */}
             <a
               className="hdr__login"
               href={PORTAL_URL}
@@ -104,65 +137,69 @@ const Header = () => {
               <span>Login</span>
             </a>
 
-            {/* Hamburger */}
             <button
-              className={`hdr__burger${menuOpen ? ' hdr__burger--open' : ''}`}
-              onClick={() => setMenuOpen(v => !v)}
+              className="hdr__burger"
+              onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
+              aria-controls="site-menu"
             >
-              <span /><span /><span />
+              <span className="hdr__burger-text" aria-hidden="true">{menuOpen ? 'Close' : 'Menu'}</span>
+              <span className="hdr__burger-lines" aria-hidden="true"><span /><span /></span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile overlay */}
-      {menuOpen && <div className="hdr__overlay" onClick={() => setMenuOpen(false)} />}
+      {/* Full-screen menu */}
+      <div
+        id="site-menu"
+        className={`menu${menuOpen ? ' menu--open' : ''}`}
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
+        data-lenis-prevent
+      >
+        <div className="menu__inner">
+          <nav className="menu__nav" aria-label="Menu">
+            {navItems.map((item, i) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/'}
+                className={({ isActive }) => `menu__link${isActive ? ' menu__link--active' : ''}`}
+                style={{ '--mi': i }}
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="menu__num">{String(i + 1).padStart(2, '0')}</span>
+                <span className="menu__label">{item.label}</span>
+              </NavLink>
+            ))}
+          </nav>
 
-      {/* Mobile drawer */}
-      <div className={`hdr__drawer${menuOpen ? ' hdr__drawer--open' : ''}`} aria-hidden={!menuOpen}>
-        <div className="hdr__drawer-head">
-          <Link to="/" className="hdr__drawer-logo" onClick={() => setMenuOpen(false)}>
-            <img src={logo} alt="Mero Vrindavan Dham" />
-            <span>Mero Vrindavan Dham</span>
-          </Link>
-          <button className="hdr__drawer-close" onClick={() => setMenuOpen(false)} aria-label="Close">
-            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        <nav className="hdr__drawer-nav">
-          {navItems.map((item, i) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/'}
-              className={({ isActive }) => `hdr__drawer-link${isActive ? ' hdr__drawer-link--active' : ''}`}
-              style={{ animationDelay: `${i * 55}ms` }}
+          <div className="menu__aside">
+            <p className="menu__note">
+              <i aria-hidden="true" />
+              Free site visit support
+            </p>
+            {hasSalesPhone && (
+              <a className="menu__call" href={telHref}>Call Now: {SALES_PHONE}</a>
+            )}
+            <a
+              className="menu__login"
+              href={PORTAL_URL}
+              target="_blank"
+              rel="noreferrer"
               onClick={() => setMenuOpen(false)}
             >
-              <span>{item.label}</span>
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="hdr__drawer-foot">
-          <a
-            className="hdr__drawer-login"
-            href={PORTAL_URL}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => setMenuOpen(false)}
-          >
-            <LoginIcon />
-            <span>Login to Portal</span>
-          </a>
+              <LoginIcon />
+              <span>Login to Portal</span>
+            </a>
+            <div className="menu__socials">
+              {socials.map((s) => (
+                <a key={s.label} href={s.href} target="_blank" rel="noreferrer">{s.label}</a>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </>

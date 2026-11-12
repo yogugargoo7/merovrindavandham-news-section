@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './FAQ.css';
+import SplitText from '../fx/SplitText';
+import BtnText from '../fx/BtnText';
 import { trackLeadEvent } from '../../utils/analytics';
 
 const faqs = [
@@ -89,59 +91,64 @@ const FAQ = () => {
   }, []);
 
   return (
-    <section className="faq-section reveal-on-scroll" id="faq">
-      <div className="faq-container">
-        <div className="faq-header">
-          <div className="faq-badge">
-            <div className="faq-badge-icon"></div>
-            Frequently Asked Questions
-          </div>
-          <h2 className="faq-title">Real estate questions buyers ask first</h2>
-          <h3 className="faq-subtitle">Practical answers before you plan a visit</h3>
-          <p className="faq-description">
+    <section className="sec sec--paper faq" id="faq">
+      <div className="wrap faq__grid">
+        <div className="faq__head">
+          <span className="eyebrow" data-reveal="up">Frequently Asked Questions</span>
+          <SplitText as="h2" className="display-l" text={"Real estate questions buyers ask *first*"} />
+          <h3 className="faq__subtitle" data-reveal="up" style={{ '--d': '120ms' }}>Practical answers before you plan a visit</h3>
+          <p className="faq__description" data-reveal="up" style={{ '--d': '180ms' }}>
             Review location, plot sizes, pricing, documents and site-visit details before speaking with the team.
           </p>
+
+          <div className="faq__trust" aria-label="Buyer support highlights" data-reveal="stagger" style={{ '--d': '220ms' }}>
+            <div className="faq__trust-card">
+              <span>Verify</span>
+              <strong>Documents + Layout</strong>
+            </div>
+            <div className="faq__trust-card">
+              <span>Compare</span>
+              <strong>Price + Availability</strong>
+            </div>
+            <div className="faq__trust-card">
+              <span>Visit</span>
+              <strong>Route + Plot Guidance</strong>
+            </div>
+          </div>
         </div>
 
-        <div className="faq-trust-row" aria-label="Buyer support highlights">
-          <div className="faq-trust-card">
-            <span>Verify</span>
-            <strong>Documents + Layout</strong>
-          </div>
-          <div className="faq-trust-card">
-            <span>Compare</span>
-            <strong>Price + Availability</strong>
-          </div>
-          <div className="faq-trust-card">
-            <span>Visit</span>
-            <strong>Route + Plot Guidance</strong>
-          </div>
-        </div>
-
-        <div className="faq-list">
-          {faqs.map((faq) => (
-            <div key={faq.id} className={`faq-item ${openFAQ === faq.id ? 'active' : ''}`}>
-              <button className="faq-question" onClick={() => toggleFAQ(faq.id)} aria-expanded={openFAQ === faq.id}>
-                <span className="faq-question-text">{faq.question}</span>
-                <span className="faq-toggle-icon">{openFAQ === faq.id ? '-' : '+'}</span>
-              </button>
-              <div className={`faq-answer ${openFAQ === faq.id ? 'open' : ''}`}>
-                <div className="faq-answer-content">
-                  <p>{faq.answer}</p>
+        <div className="faq__list" data-reveal="stagger">
+          {faqs.map((faq, i) => {
+            const open = openFAQ === faq.id;
+            return (
+              <div key={faq.id} className={`faq__item${open ? ' is-open' : ''}`}>
+                <button className="faq__q" onClick={() => toggleFAQ(faq.id)} aria-expanded={open}>
+                  <span className="faq__num">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="faq__q-text">{faq.question}</span>
+                  <span className="faq__icon" aria-hidden="true"><i /><i /></span>
+                </button>
+                <div className="faq__a">
+                  <div className="faq__a-inner">
+                    <p>{faq.answer}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+      </div>
 
-        <div className="faq-cta">
-          <h3 className="faq-cta-title">Need latest payment details or plot availability?</h3>
-          <p className="faq-cta-description">
-            Connect with the sales team for brochure, latest payment details, available plot options and visit coordination.
-          </p>
-          <div className="faq-cta-buttons">
-            <Link to="/contact" className="faq-cta-button primary">Send an Enquiry</Link>
-            <Link to="/plots" className="faq-cta-button secondary">View Plot Options</Link>
+      <div className="wrap">
+        <div className="faq__cta" data-reveal="up">
+          <div>
+            <h3 className="display-s faq__cta-title">Need latest payment details or plot availability?</h3>
+            <p className="faq__cta-description">
+              Connect with the sales team for brochure, latest payment details, available plot options and visit coordination.
+            </p>
+          </div>
+          <div className="btn-row">
+            <Link to="/contact" className="btn btn--ink"><BtnText>Send an Enquiry</BtnText></Link>
+            <Link to="/plots" className="btn btn--line"><BtnText>View Plot Options</BtnText></Link>
           </div>
         </div>
       </div>

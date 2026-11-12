@@ -1,260 +1,186 @@
+/* =====================================================================
+   QUICK LEAD MODAL
+   ===================================================================== */
 .qlm-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100dvh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  animation: qlmFadeIn 0.3s ease-out;
+  inset: 0;
+  z-index: 2100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(var(--shade-rgb), 0.62);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow-y: auto;
+  animation: qlmFade 0.4s ease both;
+}
+
+@keyframes qlmFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .qlm-card {
-  background: var(--true-white, #ffffff);
-  border-radius: 24px;
-  width: 100%;
-  max-width: 420px;
-  padding: 2rem;
   position: relative;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  animation: qlmSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  width: min(100%, 440px);
+  padding: 38px 34px 30px;
+  border-radius: var(--r-lg);
+  background: var(--white);
+  color: var(--text);
+  box-shadow: var(--shadow-deep);
+  overflow: hidden;
+  animation: qlmIn 0.8s var(--ease-out) both;
+}
+
+.qlm-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold-light), var(--gold));
+}
+
+@keyframes qlmIn {
+  from { opacity: 0; transform: translateY(36px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
 }
 
 .qlm-close {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  background: #f3f4f6;
-  border: none;
-  width: 36px;
-  height: 36px;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s;
+  border: 1px solid var(--line);
+  color: var(--text-2);
+  transition: background 0.3s ease, color 0.3s ease, transform 0.5s var(--ease-out);
 }
 
 .qlm-close:hover {
-  background: #e5e7eb;
-  color: #111827;
+  background: var(--ink);
+  color: var(--paper);
   transform: rotate(90deg);
 }
 
 .qlm-header {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-right: 40px;
 }
 
-.qlm-icon-wrap {
-  background: linear-gradient(135deg, var(--brand-primary) 0%, #7a4f24 100%);
-  color: white;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(13, 46, 34, 0.28);
-  flex-shrink: 0;
+.qlm-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .qlm-title {
-  font-size: 1.25rem;
+  font-family: var(--f-sans);
   font-weight: 700;
-  color: var(--text-primary, #111827);
-  margin: 0 0 0.25rem 0;
-  line-height: 1.2;
+  font-size: 1.35rem;
+  line-height: 1;
+  margin-bottom: 6px;
 }
 
 .qlm-subtitle {
-  font-size: 0.875rem;
-  color: var(--text-muted, #6b7280);
-  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-3);
+  line-height: 1.4;
 }
 
 .qlm-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  display: grid;
+  gap: 22px;
 }
 
-.qlm-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.qlm-field label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-primary, #374151);
-}
-
-.qlm-field input {
-  padding: 0.875rem 1rem;
-  border-radius: 12px;
-  border: 1px solid #d1d5db;
-  font-size: 1rem;
-  transition: all 0.2s;
-  outline: none;
-  background: #f9fafb;
-}
-
-.qlm-field input:focus {
-  background: #ffffff;
-  border-color: var(--brand-accent);
-  box-shadow: 0 0 0 4px rgba(169, 118, 63, 0.1);
-}
-
-.qlm-field input:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.qlm-error {
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  background: rgba(178, 58, 58, 0.08);
+  color: #8e2a2a;
+  font-size: 0.86rem;
+  line-height: 1.5;
 }
 
 .qlm-submit {
-  background: linear-gradient(135deg, var(--brand-primary) 0%, #7a4f24 100%);
-  color: white;
-  border: none;
-  padding: 1rem;
-  border-radius: 12px;
-  font-size: 0.96rem;
-  font-weight: 700;
-  font-family: var(--font-family-primary);
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.28s ease;
-  box-shadow: 0 6px 20px rgba(13, 46, 34, 0.28);
-  margin-top: 0.5rem;
-  letter-spacing: 0.02em;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 24px;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  transition: background 0.4s ease, color 0.4s ease, transform 0.4s var(--ease-out);
 }
 
 .qlm-submit:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(13, 46, 34, 0.38);
-  filter: brightness(1.06);
+  background: var(--gold);
+  color: var(--ink);
 }
 
 .qlm-submit:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.qlm-submit.success {
-  background: #10b981; /* green-500 */
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
-.qlm-submit.error {
-  background: #ef4444; /* red-500 */
+  transform: scale(0.98);
 }
 
 .qlm-submit:disabled {
-  opacity: 0.8;
+  opacity: 0.55;
   cursor: not-allowed;
+}
+
+.qlm-submit.loading,
+.qlm-submit.success {
+  opacity: 1;
+}
+
+.qlm-submit.success {
+  background: var(--success);
+  color: var(--white);
+}
+
+.qlm-submit__arrow {
+  transition: transform 0.5s var(--ease-out);
+}
+
+.qlm-submit:hover .qlm-submit__arrow {
+  transform: translateX(4px);
 }
 
 .qlm-spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top-color: #fff;
+  border: 2px solid rgba(var(--paper-rgb), 0.3);
+  border-top-color: var(--paper);
   animation: qlmSpin 0.8s linear infinite;
-}
-
-.qlm-note {
-  font-size: 0.75rem;
-  text-align: center;
-  color: #9ca3af;
-  margin: 0;
-  margin-top: 0.5rem;
-}
-
-.qlm-error {
-  margin: -0.25rem 0 0;
-  padding: 0.75rem 0.9rem;
-  border-radius: 10px;
-  background: #fef2f2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
-  font-size: 0.82rem;
-  line-height: 1.4;
-}
-
-@keyframes qlmFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes qlmSlideUp {
-  from { opacity: 0; transform: translateY(20px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes qlmSpin {
   to { transform: rotate(360deg); }
 }
 
-/* Dark mode support if applicable */
-@media (prefers-color-scheme: dark) {
-  .qlm-card {
-    background: #1f2937;
-    border-color: #374151;
-  }
-  .qlm-close {
-    background: #374151;
-    color: #9ca3af;
-  }
-  .qlm-close:hover {
-    background: #4b5563;
-    color: #fff;
-  }
-  .qlm-title, .qlm-field label {
-    color: #f3f4f6;
-  }
-  .qlm-field input {
-    background: #374151;
-    border-color: #4b5563;
-    color: #f3f4f6;
-  }
-  .qlm-field input:focus {
-    background: #1f2937;
-  }
+.qlm-note {
+  font-size: 0.78rem;
+  color: var(--text-3);
+  text-align: center;
 }
 
-@media (max-width: 520px) {
-  .qlm-backdrop {
-    padding: 12px;
-    align-items: flex-end;
-  }
-
+@media (max-width: 480px) {
   .qlm-card {
-    max-width: none;
-    padding: 22px;
-    border-radius: 22px;
+    padding: 32px 22px 24px;
   }
 
-  .qlm-header {
-    gap: 12px;
-    margin-bottom: 18px;
-    padding-right: 42px;
-  }
-
-  .qlm-close {
-    top: 14px;
-    right: 14px;
+  .qlm-card .qlm-note {
+    font-size: 0.85rem;
   }
 }

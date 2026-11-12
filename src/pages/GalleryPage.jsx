@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import useReveal from '../hooks/useReveal';
 import { useSEO } from '../hooks/useSEO';
 import { publicAsset } from '../utils/publicAsset';
+import { lockScroll, unlockScroll } from '../utils/scrollLock';
+import PageBanner from '../components/PageBanner/PageBanner';
+import CtaStrip from '../components/CtaStrip/CtaStrip';
+import SplitText from '../components/fx/SplitText';
 import './pages.css';
 import './GalleryPage.css';
 
@@ -34,7 +36,6 @@ const GALLERY_SEO = {
 };
 
 const GalleryPage = () => {
-  useReveal();
   useSEO(GALLERY_SEO);
   const [active, setActive] = useState('all');
   const [lightbox, setLightbox] = useState(null);
@@ -45,6 +46,7 @@ const GalleryPage = () => {
   const closeLightbox = useCallback(() => setLightbox(null), []);
   const prevPhoto = useCallback(() => setLightbox((i) => (i > 0 ? i - 1 : filtered.length - 1)), [filtered.length]);
   const nextPhoto = useCallback(() => setLightbox((i) => (i < filtered.length - 1 ? i + 1 : 0)), [filtered.length]);
+  const isOpen = lightbox !== null;
 
   // Window-level listener: a div onKeyDown only fires when focus is inside it,
   // so Escape/arrow keys would not work right after opening the lightbox.
@@ -59,58 +61,65 @@ const GalleryPage = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [lightbox, closeLightbox, prevPhoto, nextPhoto]);
 
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    lockScroll();
+    return unlockScroll;
+  }, [isOpen]);
+
   return (
     <div>
-      {/* Banner */}
-      <div className="page-banner page-banner--gallery">
-        <div className="page-banner__content">
-          <div className="page-banner__breadcrumb">
-            <Link to="/">Home</Link>
-            <span className="page-banner__breadcrumb-sep">/</span>
-            <span>Gallery</span>
-          </div>
-          <div className="page-banner__kicker">Photo Gallery</div>
-          <h1 className="page-banner__title">See the Project<br />With Your Own Eyes</h1>
-          <p className="page-banner__subtitle">Real site photos, approach roads, location maps and the spiritual surroundings of Mero Vrindavan Dham.</p>
-        </div>
-        <div className="page-banner__line"></div>
-      </div>
+      <PageBanner
+        variant="gallery"
+        crumb="Gallery"
+        kicker="Photo Gallery"
+        title={"See the Project\n*With Your Own Eyes*"}
+        subtitle="Real site photos, approach roads, location maps and the spiritual surroundings of Mero Vrindavan Dham."
+      />
 
       {/* Photo Grid */}
-      <section className="inner-section inner-section--white reveal-on-scroll">
-        <div className="inner-container">
-          <div className="inner-header">
-            <span className="inner-kicker">Project Photos</span>
-            <h2 className="inner-title">Site & Location Gallery</h2>
-            <p className="inner-desc">Browse drone views, 3D renders, site photos and township visuals — everything you need before booking a visit.</p>
+      <section className="sec sec--paper">
+        <div className="wrap">
+          <div className="sec-head sec-head--split">
+            <span className="eyebrow" data-reveal="up">Project Photos</span>
+            <SplitText as="h2" className="display-l" text={"Site & Location\n*Gallery*"} />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
+              Browse drone views, 3D renders, site photos and township visuals — everything you need before booking a visit.
+            </p>
           </div>
 
           {/* Filter Tabs */}
-          <div className="gallery-filters">
+          <div className="gl-filters" role="tablist" aria-label="Filter photos" data-reveal="up">
             {filters.map((f) => (
               <button
                 key={f.key}
-                className={`gallery-filter-btn${active === f.key ? ' gallery-filter-btn--active' : ''}`}
+                role="tab"
+                aria-selected={active === f.key}
+                className={`gl-filter${active === f.key ? ' gl-filter--active' : ''}`}
                 onClick={() => setActive(f.key)}
               >
                 {f.label}
+                <sup>{f.key === 'all' ? photos.length : photos.filter((p) => p.category === f.key).length}</sup>
               </button>
             ))}
           </div>
 
           {/* Grid */}
-          <div className="gallery-grid stagger-children">
+          <div className="gl-grid" key={active} data-reveal="stagger">
             {filtered.map((photo, idx) => (
               <button
                 key={photo.src + idx}
-                className="gallery-item"
+                className="gl-item"
                 onClick={() => openLightbox(idx)}
                 aria-label={`Open ${photo.alt}`}
               >
-                <img src={photo.src} alt={photo.alt} loading="lazy" />
-                <div className="gallery-item__overlay">
-                  <span className="gallery-item__label">{photo.label}</span>
-                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <div className="media gl-item__media">
+                  <img src={photo.src} alt={photo.alt} loading="lazy" />
+                </div>
+                <div className="gl-item__overlay">
+                  <span className="gl-item__index">{String(idx + 1).padStart(2, '0')}</span>
+                  <span className="gl-item__label">{photo.label}</span>
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                   </svg>
                 </div>
@@ -121,14 +130,16 @@ const GalleryPage = () => {
       </section>
 
       {/* Visit Section */}
-      <section className="inner-section inner-section--gray reveal-on-scroll">
-        <div className="inner-container">
-          <div className="inner-header">
-            <span className="inner-kicker">Site Visit</span>
-            <h2 className="inner-title">Walk the Project in Person</h2>
-            <p className="inner-desc">Photos help you shortlist the project. A guided site visit gives you the clearest view of roads, plots, surroundings and current availability.</p>
+      <section className="sec sec--sand">
+        <div className="wrap">
+          <div className="sec-head sec-head--split">
+            <span className="eyebrow" data-reveal="up">Site Visit</span>
+            <SplitText as="h2" className="display-l" text={"Walk the Project\n*in Person*"} />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
+              Photos help you shortlist the project. A guided site visit gives you the clearest view of roads, plots, surroundings and current availability.
+            </p>
           </div>
-          <div className="gallery-video-wrap">
+          <div className="media gl-video" data-reveal="img">
             <video
               src={publicAsset('vrindavan-material/mvd-site-web.mp4')}
               poster={publicAsset('vrindavan-material/site-3d-view.webp')}
@@ -144,39 +155,38 @@ const GalleryPage = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <div className="page-cta-strip page-cta-strip--gallery">
-        <h2 className="page-cta-strip__title">Want to See It In Person?</h2>
-        <p className="page-cta-strip__sub">Schedule a free site visit — our team will take you through the entire plot area and answer every question.</p>
-        <div className="page-cta-strip__buttons">
-          <Link to="/contact" className="page-cta-btn page-cta-btn--primary">Book Site Visit</Link>
-          <Link to="/plots" className="page-cta-btn page-cta-btn--secondary">View Plot Options</Link>
-        </div>
-      </div>
+      <CtaStrip
+        title={"Want to See It\n*In Person?*"}
+        sub="Schedule a free site visit — our team will take you through the entire plot area and answer every question."
+        primary={{ to: '/contact', label: 'Book Site Visit' }}
+        secondary={{ to: '/plots', label: 'View Plot Options' }}
+      />
 
       {/* Lightbox */}
-      {lightbox !== null && (
-        <div className="gallery-lightbox" onClick={closeLightbox} role="dialog" aria-modal="true" aria-label="Photo viewer">
-          <button className="gallery-lightbox__close" onClick={closeLightbox} aria-label="Close">
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+      {isOpen && (
+        <div className="gl-lightbox" onClick={closeLightbox} role="dialog" aria-modal="true" aria-label="Photo viewer" data-lenis-prevent>
+          <button className="gl-lightbox__close" onClick={closeLightbox} aria-label="Close">
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <button className="gallery-lightbox__nav gallery-lightbox__nav--prev" onClick={(e) => { e.stopPropagation(); prevPhoto(); }} aria-label="Previous">
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <button className="gl-lightbox__nav gl-lightbox__nav--prev" onClick={(e) => { e.stopPropagation(); prevPhoto(); }} aria-label="Previous">
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <div className="gallery-lightbox__content" onClick={(e) => e.stopPropagation()}>
+          <figure className="gl-lightbox__content" onClick={(e) => e.stopPropagation()} key={filtered[lightbox].src}>
             <img src={filtered[lightbox].src} alt={filtered[lightbox].alt} />
-            <div className="gallery-lightbox__caption">{filtered[lightbox].alt}</div>
-          </div>
-          <button className="gallery-lightbox__nav gallery-lightbox__nav--next" onClick={(e) => { e.stopPropagation(); nextPhoto(); }} aria-label="Next">
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <figcaption className="gl-lightbox__caption">{filtered[lightbox].alt}</figcaption>
+          </figure>
+          <button className="gl-lightbox__nav gl-lightbox__nav--next" onClick={(e) => { e.stopPropagation(); nextPhoto(); }} aria-label="Next">
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
-          <div className="gallery-lightbox__counter">{lightbox + 1} / {filtered.length}</div>
+          <div className="gl-lightbox__counter">
+            <b>{String(lightbox + 1).padStart(2, '0')}</b> / {String(filtered.length).padStart(2, '0')}
+          </div>
         </div>
       )}
     </div>

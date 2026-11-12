@@ -1,6 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import './Testimonials.css';
 import { usePlots } from '../../hooks/usePlots';
+import SplitText from '../fx/SplitText';
+
+const ROTATE_MS = 5000;
 
 const testimonials = [
   {
@@ -11,7 +14,6 @@ const testimonials = [
     rating: 5,
     text: 'The team explained the location, brochure and visit process with clarity. The route pin was shared on time and the site visit felt well coordinated.',
     initial: 'R',
-    color: '#1E3A8A',
   },
   {
     id: 2,
@@ -21,7 +23,6 @@ const testimonials = [
     rating: 5,
     text: 'The team response was quick and professional. I received clear guidance on plot sizes, payment planning and suitable visit timings.',
     initial: 'P',
-    color: '#0F766E',
   },
   {
     id: 3,
@@ -31,7 +32,6 @@ const testimonials = [
     rating: 5,
     text: 'The Mathura-Vrindavan location looked practical for a long-term investment. The sales team guided me through availability and document checks patiently.',
     initial: 'M',
-    color: '#c89a5e',
   },
   {
     id: 4,
@@ -41,7 +41,6 @@ const testimonials = [
     rating: 5,
     text: 'We wanted to explore a plot near Vrindavan for our family. The executive explained the location, road access and payment plan in a simple, transparent way.',
     initial: 'S',
-    color: '#7C3AED',
   },
   {
     id: 5,
@@ -51,14 +50,13 @@ const testimonials = [
     rating: 5,
     text: 'The callback and site visit scheduling were timely. After reviewing the brochure, the team clearly shared the next steps without any pressure.',
     initial: 'A',
-    color: '#DC2626',
   },
 ];
 
 const StarRating = ({ count }) => (
-  <div className="testimonial-stars" aria-label={`${count} stars`}>
+  <div className="tm__stars" aria-label={`${count} stars`}>
     {Array.from({ length: count }).map((_, i) => (
-      <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
       </svg>
     ))}
@@ -66,8 +64,8 @@ const StarRating = ({ count }) => (
 );
 
 const ArrowIcon = ({ direction }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d={direction === 'next' ? 'M9 6l6 6-6 6' : 'M15 18l-6-6 6-6'} />
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d={direction === 'next' ? 'M5 12h14M13 6l6 6-6 6' : 'M19 12H5M11 6l-6 6 6 6'} />
   </svg>
 );
 
@@ -76,114 +74,104 @@ const Testimonials = () => {
   const totalPlots = stats.totalPlots || 178;
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const timerRef = useRef(null);
 
   const goTo = (index) => setActive((index + testimonials.length) % testimonials.length);
 
   useEffect(() => {
-    if (paused) return;
-    timerRef.current = setInterval(() => {
+    if (paused) return undefined;
+    const id = setTimeout(() => {
       setActive((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(timerRef.current);
-  }, [paused]);
+    }, ROTATE_MS);
+    return () => clearTimeout(id);
+  }, [paused, active]);
 
   const current = testimonials[active];
 
   return (
     <section
-      className="testimonials-section reveal-on-scroll"
+      className={`sec sec--ink on-dark grain tm${paused ? ' tm--paused' : ''}`}
       id="testimonials"
       aria-label="Buyer testimonials"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="testimonials-container">
-        <div className="testimonials-header">
-          <span className="testimonials-kicker">Happy Buyers</span>
-          <h2 className="testimonials-title">
-            Buyer Stories, Told With Confidence
-          </h2>
-          <div className="section-gold-line section-gold-line--center"></div>
-          <p className="testimonials-subtitle">
+      <div className="wrap tm__grid">
+        <div className="tm__intro">
+          <span className="eyebrow" data-reveal="up">Happy Buyers</span>
+          <SplitText as="h2" className="display-l tm__title" text={"Buyer Stories, Told With *Confidence*"} />
+          <span className="tm__rule" data-reveal="line" aria-hidden="true" />
+          <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
             Thoughtful feedback from buyers who explored Mero Vrindavan Dham for location, planning and site-visit support.
           </p>
-        </div>
 
-        <div className="testimonials-card-wrapper">
-          <div className="testimonials-quote-icon" aria-hidden="true">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-            </svg>
-          </div>
-
-          <div className="testimonials-card" key={current.id}>
-            <div className="testimonials-text">{current.text}</div>
-
-            <div className="testimonials-footer">
-              <div className="testimonials-author">
-                <div
-                  className="testimonials-avatar"
-                  style={{ background: `linear-gradient(135deg, ${current.color}, ${current.color}aa)` }}
-                  aria-hidden="true"
-                >
-                  {current.initial}
-                </div>
-                <div className="testimonials-author-info">
-                  <div className="testimonials-name">{current.name}</div>
-                  <div className="testimonials-meta">
-                    <span className="testimonials-location">{current.location}</span>
-                    <span className="testimonials-plot">- {current.plot}</span>
-                  </div>
-                </div>
-              </div>
-              <StarRating count={current.rating} />
+          <div className="tm__trust" data-reveal="stagger" style={{ '--d': '200ms' }}>
+            <div className="tm__badge">
+              <span className="tm__badge-icon" aria-hidden="true">{totalPlots}</span>
+              <span>Total Plots</span>
+            </div>
+            <div className="tm__badge">
+              <span className="tm__badge-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" /></svg>
+              </span>
+              <span>Quick Response Team</span>
+            </div>
+            <div className="tm__badge">
+              <span className="tm__badge-icon" aria-hidden="true">5★</span>
+              <span>Buyer Satisfaction</span>
             </div>
           </div>
         </div>
 
-        <div className="testimonials-dots" role="tablist" aria-label="Testimonial navigation">
-          {testimonials.map((t, i) => (
-            <button
-              key={t.id}
-              role="tab"
-              aria-selected={i === active}
-              aria-label={`Go to testimonial ${i + 1}`}
-              className={`testimonials-dot ${i === active ? 'active' : ''}`}
-              onClick={() => goTo(i)}
-            />
-          ))}
-        </div>
+        <div className="tm__stage" data-reveal="up" style={{ '--d': '200ms' }}>
+          <svg className="tm__quote-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+          </svg>
 
-        <div className="testimonials-nav">
-          <button
-            className="testimonials-arrow"
-            onClick={() => goTo(active - 1)}
-            aria-label="Previous testimonial"
-          >
-            <ArrowIcon direction="previous" />
-          </button>
-          <button
-            className="testimonials-arrow"
-            onClick={() => goTo(active + 1)}
-            aria-label="Next testimonial"
-          >
-            <ArrowIcon direction="next" />
-          </button>
-        </div>
+          <figure className="tm__card" key={current.id}>
+            <blockquote className="tm__text">{current.text}</blockquote>
+            <figcaption className="tm__footer">
+              <div className="tm__author">
+                <div className="tm__avatar" aria-hidden="true">{current.initial}</div>
+                <div>
+                  <div className="tm__name">{current.name}</div>
+                  <div className="tm__meta">
+                    <span>{current.location}</span>
+                    <span>- {current.plot}</span>
+                  </div>
+                </div>
+              </div>
+              <StarRating count={current.rating} />
+            </figcaption>
+          </figure>
 
-        <div className="testimonials-trust">
-          <div className="trust-badge">
-            <span className="trust-badge-icon" aria-hidden="true">{totalPlots}</span>
-            <span>Total Plots</span>
-          </div>
-          <div className="trust-badge">
-            <span className="trust-badge-icon" aria-hidden="true">⚡</span>
-            <span>Quick Response Team</span>
-          </div>
-          <div className="trust-badge">
-            <span className="trust-badge-icon" aria-hidden="true">5★</span>
-            <span>Buyer Satisfaction</span>
+          <div className="tm__controls">
+            <div className="tm__dots" role="tablist" aria-label="Testimonial navigation">
+              {testimonials.map((t, i) => (
+                <button
+                  key={t.id}
+                  role="tab"
+                  aria-selected={i === active}
+                  aria-label={`Go to testimonial ${i + 1}`}
+                  className={`tm__dot${i === active ? ' is-active' : ''}`}
+                  style={{ '--rotate-ms': `${ROTATE_MS}ms` }}
+                  onClick={() => goTo(i)}
+                >
+                  {/* remount restarts the bar so it stays in step with the timer after a pause */}
+                  <span key={i === active ? `${active}-${paused}` : 'idle'} />
+                </button>
+              ))}
+            </div>
+            <div className="tm__nav">
+              <span className="tm__count" aria-hidden="true">
+                {String(active + 1).padStart(2, '0')} / {String(testimonials.length).padStart(2, '0')}
+              </span>
+              <button className="tm__arrow" onClick={() => goTo(active - 1)} aria-label="Previous testimonial">
+                <ArrowIcon direction="previous" />
+              </button>
+              <button className="tm__arrow" onClick={() => goTo(active + 1)} aria-label="Next testimonial">
+                <ArrowIcon direction="next" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

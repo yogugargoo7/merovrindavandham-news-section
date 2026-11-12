@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import "./LeadChatbot.css";
+import logo from "../../assets/siteImages/VrindavanLogoSmall.webp";
 import { submitLeadToCRM } from "../../utils/crmApi";
 import { isValidIndianMobile, sanitizeIndianMobileInput } from "../../utils/leadValidation";
 import { trackConversionEvent, trackLeadEvent } from "../../utils/analytics";
@@ -21,11 +23,13 @@ export default function LeadChatBot() {
   const [input, setInput] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const bottomRef = useRef(null);
+  const listRef = useRef(null);
 
+  // keep the newest message in view (scrolls only the message list, never the page)
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, step]);
+    const list = listRef.current;
+    if (list) list.scrollTo({ top: list.scrollHeight, behavior: "smooth" });
+  }, [messages, step, isOpen]);
 
   // Note: the chat no longer auto-opens. It used to pop open after 5s and
   // float over page content (plot details, map, headings) — visitors open
@@ -127,89 +131,61 @@ export default function LeadChatBot() {
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50 p-3.5 sm:p-4 bg-[var(--brand-primary)] text-[var(--true-white)] rounded-full shadow-lg ring-2 ring-[var(--brand-accent)] hover:bg-[var(--brand-secondary)] transition-all duration-300 flex items-center justify-center"
+        className={`lcb-toggle${isOpen ? " lcb-toggle--open" : ""}`}
         aria-label="Toggle Chat"
+        aria-expanded={isOpen}
       >
+        <span className="lcb-toggle__ring" aria-hidden="true" />
         {isOpen ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         ) : (
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="bubbleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{ stopColor: "#FFEB3B", stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: "#FBC02D", stopOpacity: 1 }} />
-              </linearGradient>
-              <filter id="softShadow" x="-20%" y="-20%" width="150%" height="150%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="1" />
-                <feOffset dx="1" dy="2" result="offsetblur" />
-                <feComponentTransfer><feFuncA type="linear" slope="0.3" /></feComponentTransfer>
-                <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-            </defs>
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="url(#bubbleGradient)" filter="url(#softShadow)" stroke="#F57F17" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M19 5H7C5.89543 5 5 5.89543 5 7" stroke="white" strokeWidth="0.8" strokeLinecap="round" opacity="0.4" />
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            <path d="M8 9h8M8 13h5" />
           </svg>
         )}
       </button>
 
       {/* Chat Window */}
-      <div
-        className={`fixed bottom-36 left-3 right-3 sm:left-auto sm:bottom-24 sm:right-6 sm:w-[380px] h-[min(500px,62vh)] sm:h-[min(500px,72vh)] max-h-[62vh] sm:max-h-[72vh] bg-[var(--true-white)] rounded-2xl shadow-2xl border border-[var(--border-primary)] flex flex-col overflow-hidden z-50 transition-all duration-300 origin-bottom-right ${
-          isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
-        }`}
-      >
+      <div className={`lcb-window${isOpen ? " lcb-window--open" : ""}`} aria-hidden={!isOpen} inert={!isOpen}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-[var(--brand-primary)] via-[var(--brand-secondary)] to-[var(--brand-accent)] text-[var(--true-white)] px-5 py-4">
-          <div className="font-bold text-lg">Mero Vrindavan Dham</div>
-          <div className="text-xs font-normal text-[var(--brand-accent)]">Official Support - Online</div>
+        <div className="lcb-head">
+          <img className="lcb-head__logo" src={logo} alt="" width="42" height="42" />
+          <div>
+            <div className="lcb-head__title">Mero Vrindavan Dham</div>
+            <div className="lcb-head__status"><i aria-hidden="true" />Official Support - Online</div>
+          </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-[var(--section-bg-secondary)]">
+        <div className="lcb-messages" ref={listRef} data-lenis-prevent>
           {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.from === "bot" ? "justify-start" : "justify-end"}`}>
-              <div
-                className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm ${
-                  m.from === "bot"
-                    ? "bg-[var(--true-white)] text-[var(--text-primary)] rounded-tl-none border border-[var(--border-primary)] border-l-4 border-l-[var(--brand-accent)]"
-                    : "bg-[var(--brand-primary)] text-[var(--true-white)] rounded-tr-none"
-                }`}
-                style={{ animation: "fadeIn 0.5s ease-in-out" }}
-              >
-                {m.text}
-              </div>
+            <div key={i} className={`lcb-row lcb-row--${m.from}`}>
+              <div className="lcb-bubble">{m.text}</div>
             </div>
           ))}
 
           {step < steps.length && messages[messages.length - 1]?.from === "user" && (
-            <div className="flex justify-start">
-              <div className="bg-[var(--true-white)] text-[var(--text-primary)] rounded-2xl rounded-tl-none px-4 py-2.5 text-sm shadow-sm border border-[var(--border-primary)] border-l-4 border-l-[var(--brand-accent)]">
-                {currentStep.text}
-              </div>
+            <div className="lcb-row lcb-row--bot">
+              <div className="lcb-bubble">{currentStep.text}</div>
             </div>
           )}
-
-          <div ref={bottomRef} />
         </div>
 
         {/* Input / Options area */}
-        <div className="p-4 border-t border-[var(--border-primary)] bg-[var(--true-white)]">
+        <div className="lcb-foot">
           {step < steps.length && (
             <>
               {currentStep.options ? (
-                <div className="flex flex-wrap gap-2">
+                <div className="lcb-options">
                   {currentStep.options.map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => addAnswer(opt)}
-                      className="border border-[var(--brand-accent)] text-[var(--brand-primary)] rounded-full px-4 py-2 text-sm font-semibold hover:bg-[var(--brand-accent)] hover:text-[var(--brand-primary)] transition-colors duration-200"
-                    >
+                    <button key={opt} onClick={() => addAnswer(opt)} className="lcb-option">
                       {opt}
                     </button>
                   ))}
                 </div>
               ) : (
-                <div className="flex gap-2 items-center">
+                <div className="lcb-input-row">
                   <input
                     value={input}
                     onChange={(e) => setInput(currentStep.key === "phone" ? sanitizeIndianMobileInput(e.target.value) : e.target.value)}
@@ -217,12 +193,10 @@ export default function LeadChatBot() {
                     placeholder="Type your answer..."
                     inputMode={currentStep.key === "phone" ? "numeric" : undefined}
                     maxLength={currentStep.key === "phone" ? 10 : undefined}
-                    className="flex-1 border border-[var(--border-primary)] rounded-full px-4 py-2 text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--brand-accent)] focus:ring-1 focus:ring-[var(--brand-accent)]"
+                    className="lcb-input"
+                    aria-label="Your answer"
                   />
-                  <button
-                    onClick={sendText}
-                    className="bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)] p-2.5 rounded-full hover:bg-[var(--btn-primary-hover)] transition-colors shadow-md flex-shrink-0"
-                  >
+                  <button onClick={sendText} className="lcb-send" aria-label="Send">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                   </button>
                 </div>
@@ -231,9 +205,7 @@ export default function LeadChatBot() {
           )}
 
           {step >= steps.length && (
-            <div className="text-center py-2">
-              <p className="text-xs text-[var(--text-muted)] mt-2">Aapki details successfully submit ho gayi ✅ Hamari team jald aapse contact karegi.</p>
-            </div>
+            <p className="lcb-done">Aapki details successfully submit ho gayi ✅ Hamari team jald aapse contact karegi.</p>
           )}
         </div>
       </div>

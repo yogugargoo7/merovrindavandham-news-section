@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
-import useReveal from '../hooks/useReveal';
 import { useSEO } from '../hooks/useSEO';
 import { publicAsset } from '../utils/publicAsset';
 import { usePlots } from '../hooks/usePlots';
+import PageBanner from '../components/PageBanner/PageBanner';
+import CtaStrip from '../components/CtaStrip/CtaStrip';
+import SplitText from '../components/fx/SplitText';
+import BtnText from '../components/fx/BtnText';
 import './pages.css';
 import './PlotsPage.css';
 
@@ -14,7 +17,7 @@ const plots = [
     size: '60 Sq. Yd.',
     sqft: '540 sq ft',
     category: 'Residential',
-    color: '#3a2d20',
+    tone: 'ink',
     tag: 'Entry Level',
     features: ['Ideal for first-time buyers', 'Strong rental potential', 'Compact & easy to build', 'Token: ₹11,000'],
     desc: 'The 60 Sq. Yd. plot is the most accessible entry point into Mero Vrindavan Dham. Ideal for investment, future construction or resale within 2–3 years as the area develops.',
@@ -24,7 +27,7 @@ const plots = [
     size: '100 Sq. Yd.',
     sqft: '900 sq ft',
     category: 'Residential',
-    color: '#a9763f',
+    tone: 'gold',
     tag: 'Most Popular',
     features: ['Build a 2–3 BHK home', 'Spacious front setback', 'Good for self-use + investment', 'Token: ₹11,000'],
     desc: 'The 100 Sq. Yd. plot is the most popular choice — large enough to build a comfortable home yet affordable as a pure investment asset near the Yamuna Expressway.',
@@ -34,7 +37,7 @@ const plots = [
     size: '150 Sq. Yd.',
     sqft: '1350 sq ft',
     category: 'Residential Premium',
-    color: '#3a2d20',
+    tone: 'ink',
     tag: 'Premium',
     features: ['Double road frontage', 'Higher resale value', 'More design flexibility', 'Token: ₹11,000'],
     desc: 'Corner plots at 150 Sq. Yd. offer the premium experience — two road-facing sides, wider construction options and historically higher appreciation compared to regular plots.',
@@ -44,7 +47,7 @@ const plots = [
     size: '30 Sq. Yd.',
     sqft: '270 sq ft',
     category: 'Commercial',
-    color: '#5C4A1E',
+    tone: 'deep',
     tag: 'Commercial',
     features: ['Shop / showroom use', 'High footfall location', 'Rental income potential', 'Token: ₹11,000'],
     desc: 'Commercial plots at 30 Sq. Yd. are strategically placed within the township for shop, showroom or service business setup. Limited availability — contact for current options.',
@@ -53,8 +56,10 @@ const plots = [
 
 const specs = [
   { label: 'Total Area', value: '15+ Acres' },
-  { label: 'Road Width (Main)', value: '30 ft' },
-  { label: 'Road Width (Internal)', value: '20 ft' },
+  // road widths as per the proposed layout plan (01-03-2026) and project video
+  { label: 'Road Width (Main)', value: '40 ft with central divider' },
+  { label: 'Road Width (Commercial)', value: '30 ft (in front of shops)' },
+  { label: 'Road Width (Internal)', value: '20 ft, 25 ft & 30 ft' },
   { label: 'Plot Boundary', value: 'Clearly demarcated' },
   { label: 'Soil Type', value: 'Hard & buildable' },
   { label: 'Water Supply', value: 'Planned within layout' },
@@ -72,8 +77,20 @@ const PLOTS_SEO = {
   ogUrl: 'https://merovrindavandham.com/plots',
 };
 
+// Blueprint square whose side is proportional to the plot's footprint.
+const PlotFootprint = ({ size, corner }) => {
+  const side = Math.round(Math.sqrt(parseFloat(size) / 150) * 64);
+  const offset = (72 - side) / 2;
+  return (
+    <svg className="plot-card__blueprint" viewBox="0 0 72 72" aria-hidden="true">
+      <rect x="0.5" y="0.5" width="71" height="71" rx="3" className="plot-card__blueprint-frame" />
+      <rect x={offset} y={offset} width={side} height={side} className="plot-card__blueprint-plot" />
+      {corner && <path d={`M${offset} ${offset + side + 4}H${offset + side + 4}V${offset}`} className="plot-card__blueprint-road" />}
+    </svg>
+  );
+};
+
 const PlotsPage = () => {
-  useReveal();
   useSEO(PLOTS_SEO);
   const { stats } = usePlots();
   const totalPlots = stats.totalPlots || 178;
@@ -84,106 +101,105 @@ const PlotsPage = () => {
 
   return (
     <>
-      {/* Banner */}
-      <div className="page-banner page-banner--plots">
-        <div className="page-banner__content">
-          <div className="page-banner__breadcrumb">
-            <Link to="/">Home</Link>
-            <span className="page-banner__breadcrumb-sep">/</span>
-            <span>Plots & Pricing</span>
-          </div>
-          <div className="page-banner__kicker">Plots & Pricing</div>
-          <h1 className="page-banner__title">Choose Your Plot at<br />Mero Vrindavan Dham</h1>
-          <p className="page-banner__subtitle">Residential and commercial plot options from 30 to 150 Sq. Yd. — near Vrindavan, Mathura and Yamuna Expressway.</p>
-        </div>
-        <div className="page-banner__line"></div>
-      </div>
+      <PageBanner
+        variant="plots"
+        crumb="Plots & Pricing"
+        kicker="Plots & Pricing"
+        title={"Choose Your Plot at\n*Mero Vrindavan Dham*"}
+        subtitle="Residential and commercial plot options from 30 to 150 Sq. Yd. — near Vrindavan, Mathura and Yamuna Expressway."
+      />
 
       {/* Plot Cards */}
-      <section className="inner-section inner-section--white reveal-on-scroll">
-        <div className="inner-container">
-          <div className="inner-header">
-            <span className="inner-kicker">Available Options</span>
-            <h2 className="inner-title">Plot Types & Details</h2>
-            <p className="inner-desc">Contact for current pricing — all plots come with clear documentation support and guided site visit.</p>
+      <section className="sec sec--paper">
+        <div className="wrap">
+          <div className="sec-head sec-head--split">
+            <span className="eyebrow" data-reveal="up">Available Options</span>
+            <SplitText as="h2" className="display-l" text={"Plot Types &\n*Details*"} />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
+              Contact for current pricing — all plots come with clear documentation support and guided site visit.
+            </p>
           </div>
-          <div className="plots-grid stagger-children">
+          <div className="plots-grid" data-reveal="stagger">
             {plots.map((p) => (
-              <div key={p.size + p.type} className="plot-card">
-                <div className="plot-card__header" style={{ background: p.color }}>
-                  <span className="plot-card__tag">{p.tag}</span>
+              <article key={p.size + p.type} className={`plot-card plot-card--${p.tone}`}>
+                <header className="plot-card__header">
+                  <div className="plot-card__header-top">
+                    <span className="plot-card__tag">{p.tag}</span>
+                    <PlotFootprint size={p.size} corner={p.type === 'Corner Plot'} />
+                  </div>
                   <div className="plot-card__size">{p.size}</div>
                   <div className="plot-card__sqft">{p.sqft} • {p.category}</div>
-                </div>
+                </header>
                 <div className="plot-card__body">
                   <h3 className="plot-card__type">{p.type}</h3>
                   <p className="plot-card__desc">{p.desc}</p>
-                  <ul className="plot-card__features">
+                  <ul className="ip-checks plot-card__features">
                     {p.features.map((f) => (
                       <li key={f}>
-                        <svg width="14" height="14" fill="none" stroke="#3a2d20" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M5 13l4 4L19 7" />
                         </svg>
                         {f}
                       </li>
                     ))}
                   </ul>
-                  <Link to="/contact" className="plot-card__btn">
-                    Enquire for Price
+                  <Link to="/contact" className="btn btn--ink btn--block plot-card__btn">
+                    <BtnText>Enquire for Price</BtnText>
                   </Link>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
       {/* Site Map */}
-      <section className="inner-section inner-section--gray reveal-on-scroll">
-        <div className="inner-container">
-          <div className="inner-header">
-            <span className="inner-kicker">Site Overview</span>
-            <h2 className="inner-title">Project Layout & Site Map</h2>
-            <p className="inner-desc">The marked site overview shows the overall layout, internal roads and plot demarcation across the 15+ acre township.</p>
+      <section className="sec sec--sand">
+        <div className="wrap">
+          <div className="sec-head sec-head--split">
+            <span className="eyebrow" data-reveal="up">Site Overview</span>
+            <SplitText as="h2" className="display-l" text={"Project Layout &\n*Site Map*"} />
+            <p className="lede" data-reveal="up" style={{ '--d': '150ms' }}>
+              The marked site overview shows the overall layout, internal roads and plot demarcation across the 15+ acre township.
+            </p>
           </div>
-          <div className="plots-map-wrap">
-            <img src={markedSiteImg} alt="Mero Vrindavan Dham Site Overview" className="plots-map-img" loading="lazy" />
-            <div className="plots-map-legend">
-              <div className="plots-map-legend__item"><span style={{ background: '#3a2d20' }}></span> Main Roads</div>
-              <div className="plots-map-legend__item"><span style={{ background: '#a9763f' }}></span> Internal Roads</div>
-              <div className="plots-map-legend__item"><span style={{ background: '#5a8a6a' }}></span> Green Spaces</div>
+          <div className="plots-map">
+            <div className="media plots-map__media" data-reveal="img">
+              <img src={markedSiteImg} alt="Mero Vrindavan Dham Site Overview" loading="lazy" data-parallax="0.08" />
+            </div>
+            <div className="plots-map__legend" data-reveal="up" style={{ '--d': '400ms' }}>
+              <div className="plots-map__legend-item"><span style={{ background: '#3a2d20' }}></span> Main Roads</div>
+              <div className="plots-map__legend-item"><span style={{ background: '#a9763f' }}></span> Internal Roads</div>
+              <div className="plots-map__legend-item"><span style={{ background: '#5a8a6a' }}></span> Green Spaces</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Specs Table */}
-      <section className="inner-section inner-section--gray reveal-on-scroll">
-        <div className="inner-container">
-          <div className="inner-header">
-            <span className="inner-kicker">Specifications</span>
-            <h2 className="inner-title">Project Specifications</h2>
+      <section className="sec sec--paper">
+        <div className="wrap plots-specs">
+          <div className="plots-specs__head">
+            <span className="eyebrow" data-reveal="up">Specifications</span>
+            <SplitText as="h2" className="display-l" text={"Project\n*Specifications*"} />
           </div>
-          <div className="plots-specs-table">
+          <dl className="plots-specs__table" data-reveal="stagger">
             {liveSpecs.map((s) => (
-              <div key={s.label} className="plots-spec-row">
-                <span className="plots-spec-label">{s.label}</span>
-                <span className="plots-spec-value">{s.value}</span>
+              <div key={s.label} className="plots-specs__row">
+                <dt>{s.label}</dt>
+                <dd>{s.value}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
       </section>
 
-      {/* CTA */}
-      <div className="page-cta-strip page-cta-strip--plots">
-        <h2 className="page-cta-strip__title">Interested in a Plot?</h2>
-        <p className="page-cta-strip__sub">Get the latest pricing, availability and payment plan — contact our team for a direct conversation.</p>
-        <div className="page-cta-strip__buttons">
-          <Link to="/contact" className="page-cta-btn page-cta-btn--primary">Book Site Visit</Link>
-          <Link to="/payment" className="page-cta-btn page-cta-btn--secondary">View Payment Plan</Link>
-        </div>
-      </div>
+      <CtaStrip
+        title={"Interested in a *Plot?*"}
+        sub="Get the latest pricing, availability and payment plan — contact our team for a direct conversation."
+        primary={{ to: '/contact', label: 'Book Site Visit' }}
+        secondary={{ to: '/payment', label: 'View Payment Plan' }}
+      />
     </>
   );
 };

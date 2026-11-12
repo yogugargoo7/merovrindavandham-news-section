@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react';
 import './Hero.css';
 import QuickLeadModal from '../QuickLeadModal/QuickLeadModal';
+import BrochureModal from '../BrochureModal/BrochureModal';
+import BtnText from '../fx/BtnText';
+import { transitionTo } from '../fx/PageTransition';
 import { publicAsset } from '../../utils/publicAsset';
 import { trackConversionEvent } from '../../utils/analytics';
 import { usePlots } from '../../hooks/usePlots';
+import { useSiteReady } from '../../hooks/useSiteReady';
+
+const SLIDE_MS = 4500;
 
 const carouselImages = [
   publicAsset('vrindavan-material/drone-view-mvd-3d.webp'),
@@ -20,9 +26,19 @@ const infoPanelItems = [
   { label: 'Connectivity', value: 'Yamuna Expressway' },
 ];
 
+const PinIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+  </svg>
+);
+
 const Hero = () => {
   const [active, setActive] = useState(0);
+  const [previous, setPrevious] = useState(null);
   const [modalConfig, setModalConfig] = useState({ isOpen: false, action: null });
+  const [brochureOpen, setBrochureOpen] = useState(false);
+  const ready = useSiteReady();
   const { stats } = usePlots();
   const totalPlots = stats.totalPlots || 178;
   const panelItems = [
@@ -31,12 +47,22 @@ const Hero = () => {
     ...infoPanelItems.slice(1),
   ];
 
+  const goTo = (index) => {
+    if (index === active) return;
+    setPrevious(active);
+    setActive(index);
+  };
+
+  // each slide gets its full duration, including after a manual jump;
+  // the clock waits while the preloader / curtain covers the page
   useEffect(() => {
-    const id = setInterval(() => {
-      setActive(i => (i + 1) % carouselImages.length);
-    }, 4500);
-    return () => clearInterval(id);
-  }, []);
+    if (!ready) return undefined;
+    const id = setTimeout(() => {
+      setPrevious(active);
+      setActive((active + 1) % carouselImages.length);
+    }, SLIDE_MS);
+    return () => clearTimeout(id);
+  }, [active, ready]);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
@@ -55,79 +81,88 @@ const Hero = () => {
 
   const handleViewPricesClick = () => {
     trackConversionEvent('payment_details_open', 'Hero Payment Details');
-    window.location.href = '/payment';
+    transitionTo('/payment');
   };
 
   const handleBrochureClick = () => {
     trackConversionEvent('brochure_open', 'Hero Brochure');
-    window.open(publicAsset('vrindavan-material/brochure-mero-vrindavan-dham.pdf'), '_blank', 'noopener,noreferrer');
+    setBrochureOpen(true);
   };
 
   return (
-    <section id="home" className="hero-section">
-
+    <section id="home" className="hero on-dark" data-progress>
       {/* Carousel */}
-      <div className="hero-carousel" aria-hidden="true">
+      <div className="hero__media" aria-hidden="true">
         {carouselImages.map((src, i) => (
           <div
             key={src}
-            className={`hero-slide${i === active ? ' hero-slide--active' : ''}`}
-            style={{ backgroundImage: `url(${src})` }}
-          />
+            className={`hero__slide${i === active ? ' is-active' : ''}${i === previous ? ' is-prev' : ''}`}
+          >
+            <div className="hero__img" style={{ backgroundImage: `url(${src})` }} />
+          </div>
         ))}
-        <div className="hero-overlay" />
+        <div className="hero__shade" />
       </div>
+
+      <h1 className="sr-only">Mero Vrindavan Dham - Plots in Vrindavan near Yamuna Expressway</h1>
 
       {/* Content */}
-      <div className="hero-content">
+      <div className="hero__content">
+        <div className="hero__row">
+          <div className="hero__ctas" data-reveal="up" style={{ '--d': '150ms' }}>
+            <button onClick={handleViewPricesClick} className="btn btn--gold hero__cta">
+              <BtnText>View Plots &amp; Prices</BtnText>
+            </button>
+            <button onClick={handleSiteVisitClick} className="btn btn--line-light hero__cta">
+              <BtnText icon={<PinIcon />}>Book Free Site Visit</BtnText>
+            </button>
+            <button onClick={handleBrochureClick} className="hero__brochure link-line">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Brochure</span>
+            </button>
+          </div>
 
-        <h1 className="sr-only">Mero Vrindavan Dham - Plots in Vrindavan near Yamuna Expressway</h1>
-
-        <div className="hero-cta-wrapper">
-          <button onClick={handleViewPricesClick} className="hero-cta-primary">
-            <svg className="hero-cta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            <span>View Plots &amp; Prices</span>
-          </button>
-          <button onClick={handleSiteVisitClick} className="hero-cta-secondary">
-            <svg className="hero-cta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            </svg>
-            <span>Book Free Site Visit</span>
-          </button>
-          <button onClick={handleBrochureClick} className="hero-cta-ghost">
-            <svg className="hero-cta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <span>Brochure</span>
-          </button>
+          <div className="hero__pager" data-reveal="fade" style={{ '--d': '450ms' }}>
+            <span className="hero__count" aria-hidden="true">
+              <b>{String(active + 1).padStart(2, '0')}</b>
+              <span>/ {String(carouselImages.length).padStart(2, '0')}</span>
+            </span>
+            <div className="hero__bars" role="tablist" aria-label="Slide indicators">
+              {carouselImages.map((src, i) => (
+                <button
+                  key={src}
+                  role="tab"
+                  aria-selected={i === active}
+                  aria-label={`Slide ${i + 1}`}
+                  className={`hero__bar${i === active ? ' is-active' : ''}${i < active ? ' is-done' : ''}`}
+                  style={{ '--slide-ms': `${SLIDE_MS}ms` }}
+                  onClick={() => goTo(i)}
+                >
+                  <span />
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="hero-info-panel">
+        <dl className="hero__stats" data-reveal="stagger" style={{ '--d': '300ms' }}>
           {panelItems.map((item) => (
-            <div key={item.label}>
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
+            <div key={item.label} className="hero__stat">
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
             </div>
           ))}
-        </div>
-
+        </dl>
       </div>
 
-      {/* Dot indicators */}
-      <div className="hero-dots" role="tablist" aria-label="Slide indicators">
-        {carouselImages.map((_, i) => (
-          <button
-            key={i}
-            role="tab"
-            aria-selected={i === active}
-            aria-label={`Slide ${i + 1}`}
-            className={`hero-dot${i === active ? ' hero-dot--active' : ''}`}
-            onClick={() => setActive(i)}
-          />
-        ))}
+      <div className="hero__scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <i />
       </div>
+
+      <BrochureModal isOpen={brochureOpen} onClose={() => setBrochureOpen(false)} source="Hero Brochure" />
 
       <QuickLeadModal
         isOpen={modalConfig.isOpen}

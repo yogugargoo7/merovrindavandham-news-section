@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import './Footer.css';
 import merovrindavandhamlogo from '../../assets/siteImages/VrindavanLogoSmall.webp';
+import SplitText from '../fx/SplitText';
 import { trackConversionEvent } from '../../utils/analytics';
 import { hasSalesPhone, SALES_PHONE, telHref, waHref } from '../../config/contact';
 
@@ -28,95 +29,102 @@ const Footer = () => {
   };
 
   return (
-    <footer className="site-footer reveal-on-scroll">
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 32px 0' }}>
-        <div className="footer-support-strip">
-          <span className="footer-support-badge">
-            <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+    <footer className="ftr on-dark">
+      <div className="wrap">
+        <div className="ftr__support" data-reveal="up">
+          <span className="ftr__badge">
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
             Buyer Support
           </span>
-          <p className="footer-support-text">
+          <p className="ftr__support-text">
             <strong>Mero Vrindavan Dham Township</strong> provides brochure, latest payment-details, location and site-visit assistance.
             Website pricing follows the latest payment details only. Buyers should verify current documents and plot availability with the official sales team before booking.
           </p>
         </div>
-      </div>
 
-      <div className="footer-container">
-        <div className="footer-about">
-          <div className="footer-logo">
-            <img src={merovrindavandhamlogo} alt="Mero Vrindavan Dham" />
-            <div className="footer-logo-text">
-              <h3>Mero Vrindavan Dham</h3>
-              <span>Township</span>
+        <div className="ftr__grid" data-reveal="stagger">
+          <div className="ftr__about">
+            <div className="ftr__logo">
+              <img src={merovrindavandhamlogo} alt="Mero Vrindavan Dham" width="64" height="64" />
+              <div className="ftr__logo-text">
+                <h3>Mero Vrindavan Dham</h3>
+                <span>Township</span>
+              </div>
+            </div>
+            <p>
+              Premium plotted township information for buyers looking near Vrindavan, Mathura and the Yamuna Expressway growth belt.
+            </p>
+            <div className="ftr__social">
+              <button onClick={() => handleSocialClick('facebook')} aria-label="Facebook">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </button>
+              <button onClick={() => handleSocialClick('instagram')} aria-label="Instagram">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </button>
+              <button onClick={() => handleSocialClick('youtube')} aria-label="YouTube">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </button>
             </div>
           </div>
-          <p>
-            Premium plotted township information for buyers looking near Vrindavan, Mathura and the Yamuna Expressway growth belt.
-          </p>
-          <div className="footer-social">
-            <button onClick={() => handleSocialClick('facebook')} aria-label="Facebook">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            </button>
-            <button onClick={() => handleSocialClick('instagram')} aria-label="Instagram">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </button>
-            <button onClick={() => handleSocialClick('youtube')} aria-label="YouTube">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </button>
+
+          <div className="ftr__col">
+            <h4 className="ftr__title">Quick Links</h4>
+            <nav aria-label="Footer">
+              <ul className="ftr__links">
+                {quickLinks.map((link) => (
+                  <li key={link.to}>
+                    <Link to={link.to} className="ftr__link">
+                      <span>{link.label}</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" /></svg>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
-        </div>
 
-        <div className="footer-links">
-          <h4 className="footer-section-title">Quick Links</h4>
-          <nav>
-            <ul>
-              {quickLinks.map((link) => (
-                <li key={link.to}>
-                  <Link to={link.to} className="footer-link">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-
-        <div className="footer-contact">
-          <h4 className="footer-section-title">Get in Touch</h4>
-          <address>
-            <ul>
-              <li>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                <span>Mero Vrindavan Dham Plot Pin, Vrindavan, Mathura, Uttar Pradesh - 202141</span>
-              </li>
-              {hasSalesPhone && (
+          <div className="ftr__col">
+            <h4 className="ftr__title">Get in Touch</h4>
+            <address>
+              <ul className="ftr__contact">
                 <li>
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  <span>Mero Vrindavan Dham Plot Pin, Vrindavan, Mathura, Uttar Pradesh - 202141</span>
+                </li>
+                {hasSalesPhone && (
+                  <li>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                    <span>
+                      <a className="ftr__inline-link" href={telHref} onClick={() => trackConversionEvent('call_click', 'Footer')}>Call: {SALES_PHONE}</a>
+                      {' | '}
+                      <a className="ftr__inline-link" href={waHref} target="_blank" rel="noreferrer" onClick={() => trackConversionEvent('whatsapp_click', 'Footer')}>WhatsApp</a>
+                    </span>
+                  </li>
+                )}
+                <li>
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   <span>
-                    <a className="footer-link" href={telHref} onClick={() => trackConversionEvent('call_click', 'Footer')}>Call: {SALES_PHONE}</a>
-                    {' | '}
-                    <a className="footer-link" href={waHref} target="_blank" rel="noreferrer" onClick={() => trackConversionEvent('whatsapp_click', 'Footer')}>WhatsApp</a>
+                    <a className="ftr__inline-link" href="mailto:support@merovrindavandham.com">support@merovrindavandham.com</a>
                   </span>
                 </li>
-              )}
-              <li>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                <span>
-                  <a className="footer-link" href="mailto:support@merovrindavandham.com">support@merovrindavandham.com</a>
-                </span>
-              </li>
-            </ul>
-          </address>
+              </ul>
+            </address>
+          </div>
         </div>
       </div>
 
-      <div className="footer-bottom">
-        <p>Copyright {new Date().getFullYear()} Mero Vrindavan Dham Township. All Rights Reserved.</p>
-        <p>Premium plots near Yamuna Expressway, Vrindavan, Mathura</p>
+      <div className="ftr__mark" aria-hidden="true">
+        <SplitText as="div" className="ftr__mark-text" text="Mero Vrindavan *Dham*" />
       </div>
-      <div className="footer-disclaimer">
-        Disclaimer: Pricing and booking information on this website is based on the latest payment details shown in the Payment Details section. Availability, specifications and development details are subject to confirmation. Buyers are advised to independently verify project details, documents, approvals, plot availability and written commitments directly with the authorized sales team before making any financial commitment.
+
+      <div className="wrap">
+        <div className="ftr__bottom">
+          <p>Copyright {new Date().getFullYear()} Mero Vrindavan Dham Township. All Rights Reserved.</p>
+          <p>Premium plots near Yamuna Expressway, Vrindavan, Mathura</p>
+        </div>
+        <div className="ftr__disclaimer">
+          Disclaimer: Pricing and booking information on this website is based on the latest payment details shown in the Payment Details section. Availability, specifications and development details are subject to confirmation. Buyers are advised to independently verify project details, documents, approvals, plot availability and written commitments directly with the authorized sales team before making any financial commitment.
+        </div>
       </div>
     </footer>
   );

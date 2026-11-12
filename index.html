@@ -12,11 +12,24 @@
     </script>
     <!-- End Google Tag Manager -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#3a2d20" />
-    
+    <meta name="theme-color" content="#101b3f" />
+
     <!-- Preconnect to external domains for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+
+    <!-- Motion gate: hide reveal targets until JS is ready, hold the intro while the preloader runs -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('has-js');
+        try {
+          var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!reduce && !sessionStorage.getItem('mvd_intro_seen')) d.classList.add('is-busy', 'is-intro');
+        } catch (e) {}
+      })();
+    </script>
     
     <!-- Preload hero image for LCP performance -->
     <link rel="preload" as="image" type="image/webp" href="/vrindavan-material/drone-view-mvd-3d.webp" fetchpriority="high">

@@ -3,6 +3,8 @@ import './QuickLeadModal.css';
 import { submitLeadToCRM } from '../../utils/crmApi';
 import { formatIndianMobile, isValidIndianMobile, sanitizeIndianMobileInput } from '../../utils/leadValidation';
 import { trackConversionEvent, trackLeadEvent } from '../../utils/analytics';
+import { lockScroll, unlockScroll } from '../../utils/scrollLock';
+import logo from '../../assets/siteImages/VrindavanLogoSmall.webp';
 
 export default function QuickLeadModal({
   isOpen,
@@ -36,8 +38,9 @@ export default function QuickLeadModal({
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    if (!isOpen) return undefined;
+    lockScroll();
+    return unlockScroll;
   }, [isOpen]);
 
   const handleSubmit = async (e) => {
@@ -119,18 +122,14 @@ export default function QuickLeadModal({
   if (!isOpen) return null;
 
   return (
-    <div className="qlm-backdrop" role="dialog" aria-modal="true" aria-label="Quick enquiry" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+    <div className="qlm-backdrop" role="dialog" aria-modal="true" aria-label="Quick enquiry" data-lenis-prevent onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="qlm-card">
         <button className="qlm-close" onClick={onClose} aria-label="Close">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
 
         <div className="qlm-header">
-          <div className="qlm-icon-wrap">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.61a16 16 0 0 0 5.95 5.95l1.68-1.68a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
-            </svg>
-          </div>
+          <img className="qlm-logo" src={logo} alt="" width="52" height="52" />
           <div>
             <h3 className="qlm-title">Quick Details</h3>
             <p className="qlm-subtitle">Our team will connect with you shortly</p>
@@ -138,17 +137,17 @@ export default function QuickLeadModal({
         </div>
 
         <form onSubmit={handleSubmit} className="qlm-form" noValidate>
-          <div className="qlm-field">
-            <label htmlFor="qlm-name">Your Name</label>
-            <input id="qlm-name" ref={nameRef} type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" required autoComplete="name" disabled={status === 'loading' || status === 'success'} />
-          </div>
+          <label className="field" htmlFor="qlm-name">
+            <span className="field__label">Your Name</span>
+            <input id="qlm-name" className="field__control" ref={nameRef} type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" required autoComplete="name" disabled={status === 'loading' || status === 'success'} />
+          </label>
 
-          <div className="qlm-field">
-            <label htmlFor="qlm-phone">Phone Number</label>
-            <input id="qlm-phone" type="tel" value={phone} onChange={(e) => setPhone(sanitizeIndianMobileInput(e.target.value))} placeholder="10 digit mobile number" required autoComplete="tel" inputMode="numeric" pattern="[0-9]{10}" maxLength="10" disabled={status === 'loading' || status === 'success'} />
-          </div>
+          <label className="field" htmlFor="qlm-phone">
+            <span className="field__label">Phone Number</span>
+            <input id="qlm-phone" className="field__control" type="tel" value={phone} onChange={(e) => setPhone(sanitizeIndianMobileInput(e.target.value))} placeholder="10 digit mobile number" required autoComplete="tel" inputMode="numeric" pattern="[0-9]{10}" maxLength="10" disabled={status === 'loading' || status === 'success'} />
+          </label>
 
-          {errorMsg && <p className="qlm-error">{errorMsg}</p>}
+          {errorMsg && <p className="qlm-error" role="alert">{errorMsg}</p>}
 
           <button type="submit" className={`qlm-submit ${status}`} disabled={status === 'loading' || status === 'success' || !name.trim() || !phone.trim()}>
             {status === 'loading' ? (
@@ -165,6 +164,7 @@ export default function QuickLeadModal({
               <>
                 {actionIcon}
                 {actionLabel}
+                <svg className="qlm-submit__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </>
             )}
           </button>

@@ -1,0 +1,83 @@
+/* =====================================================================
+   CTA STRIP — inset ink panel on paper, drifting gold light
+   ===================================================================== */
+.cta {
+  background: var(--paper);
+  padding: clamp(32px, 5vw, 72px) 0 clamp(56px, 7vw, 110px);
+}
+
+.cta__panel {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 26px;
+  padding: clamp(64px, 9vw, 140px) clamp(24px, 6vw, 96px);
+  border-radius: var(--r-lg);
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cta__panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise);
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.cta__orb {
+  position: absolute;
+  z-index: -2;
+  border-radius: 50%;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.cta__orb--one {
+  width: 60%;
+  aspect-ratio: 1;
+  left: -12%;
+  top: -40%;
+  background: radial-gradient(circle, rgba(var(--gold-rgb), 0.42), transparent 65%);
+  animation: ctaDrift 12s ease-in-out infinite alternate;
+}
+
+.cta__orb--two {
+  width: 50%;
+  aspect-ratio: 1;
+  right: -10%;
+  bottom: -45%;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.4), transparent 65%);
+  animation: ctaDrift 15s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes ctaDrift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(12%, 10%, 0) scale(1.18); }
+}
+
+.cta__title {
+  max-width: 16ch;
+}
+
+.cta__sub {
+  max-width: 54ch;
+  font-size: var(--fs-lede);
+  color: var(--text-inv-2);
+}
+
+.cta__buttons {
+  justify-content: center;
+  margin-top: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta__orb {
+    animation: none;
+  }
+}

@@ -1,0 +1,157 @@
+/* =====================================================================
+   PAGE BANNER (inner pages)
+   ===================================================================== */
+.pb {
+  position: relative;
+  min-height: min(88vh, 900px);
+  min-height: min(88svh, 900px);
+  display: flex;
+  align-items: flex-end;
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.pb__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.pb__img {
+  position: absolute;
+  inset: -6% 0;
+  background-size: cover;
+  background-position: center;
+  transform: translate3d(0, calc((var(--p, 0.5) - 0.5) * 26%), 0) scale(1.08);
+  will-change: transform;
+}
+
+html:not(.is-busy) .pb__img {
+  animation: pbZoom 2.4s var(--ease-out) both;
+}
+
+@keyframes pbZoom {
+  from { opacity: 0.2; scale: 1.18; }
+  to   { opacity: 1; scale: 1; }
+}
+
+.pb--about .pb__img        { background-image: url('/vrindavan-material/entry-view-03.webp'); }
+.pb--plots .pb__img        { background-image: url('/vrindavan-material/site-3d-view.webp'); }
+.pb--availability .pb__img { background-image: url('/vrindavan-material/drone-view-mvd-3d.webp'); }
+.pb--gallery .pb__img      { background-image: url('/vrindavan-material/commercial-view.webp'); }
+.pb--contact .pb__img      { background-image: url('/vrindavan-material/entry-view-02.webp'); }
+
+/* payment keeps a pure brand backdrop (no photo) so the figures stay the focus */
+.pb--payment .pb__img {
+  background:
+    radial-gradient(ellipse 45% 55% at 85% 20%, rgba(var(--gold-rgb), 0.35), transparent 65%),
+    radial-gradient(ellipse 50% 60% at 10% 90%, rgba(var(--accent-rgb), 0.28), transparent 65%),
+    linear-gradient(160deg, var(--ink-3) 0%, var(--ink) 60%);
+}
+
+.pb__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(var(--ink-rgb), 0.72) 0%, rgba(var(--ink-rgb), 0.35) 30%, rgba(var(--ink-rgb), 0.55) 60%, rgba(var(--ink-rgb), 0.94) 100%),
+    linear-gradient(90deg, rgba(var(--ink-rgb), 0.6) 0%, rgba(var(--ink-rgb), 0) 70%);
+}
+
+.pb--payment .pb__shade {
+  background: linear-gradient(180deg, rgba(var(--ink-rgb), 0.35) 0%, rgba(var(--ink-rgb), 0) 40%, rgba(var(--ink-rgb), 0.6) 100%);
+}
+
+.pb__shade::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise);
+  opacity: 0.06;
+}
+
+.pb__inner {
+  position: relative;
+  width: calc(100% - var(--gutter) * 2);
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: calc(var(--header-h) + 90px) 0 clamp(40px, 5vw, 72px);
+}
+
+.pb__crumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-inv-3);
+}
+
+.pb__crumb a {
+  color: var(--text-inv-2);
+  transition: color 0.3s ease;
+}
+
+.pb__crumb a:hover {
+  color: var(--gold-light);
+}
+
+.pb__crumb-sep {
+  opacity: 0.5;
+}
+
+.pb__kicker {
+  margin-bottom: 26px;
+}
+
+.pb__title {
+  max-width: 1100px;
+  font-size: clamp(2.3rem, 4.8vw, 5rem);
+  margin-bottom: clamp(28px, 4vw, 52px);
+  text-shadow: 0 10px 50px rgba(0, 0, 0, 0.35);
+}
+
+.pb__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line-inv-strong);
+}
+
+.pb__sub {
+  max-width: 56ch;
+  font-size: var(--fs-lede);
+  line-height: 1.7;
+  color: var(--text-inv-2);
+}
+
+@media (max-width: 768px) {
+  .pb {
+    min-height: 78svh;
+  }
+
+  .pb__inner {
+    padding-top: calc(var(--header-h) + 60px);
+  }
+
+  .pb__title {
+    font-size: clamp(2rem, 8.6vw, 3rem);
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pb__img,
+  .pb__inner {
+    transform: none;
+    opacity: 1;
+  }
+}
