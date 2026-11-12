@@ -8,4 +8,4 @@ _originals-backup/
 
 # local tool settings and loose files
 .claude/
-*.pdf
+/1.pdf
